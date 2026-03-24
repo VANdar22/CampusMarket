@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ProductCard } from "@/components/ProductCard";
@@ -12,7 +13,7 @@ type Product = Database["public"]["Tables"]["products"]["Row"];
 export default function Index() {
   const [category, setCategory] = useState("all");
   const [priceRange, setPriceRange] = useState([0, 500]);
-  const searchParams = new URLSearchParams(window.location.search);
+  const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get("q") || "";
 
   const { data: products, isLoading } = useQuery({
@@ -42,7 +43,6 @@ export default function Index() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 space-y-6">
-      {/* Hero */}
       <section className="rounded-2xl bg-gradient-to-br from-primary/10 via-accent to-primary/5 p-8 md:p-12">
         <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
           Student Marketplace
@@ -52,10 +52,8 @@ export default function Index() {
         </p>
       </section>
 
-      {/* Categories */}
       <CategoryFilter selected={category} onSelect={setCategory} />
 
-      {/* Price filter */}
       <div className="flex items-center gap-4 rounded-xl bg-card p-4 border">
         <span className="text-sm font-medium text-muted-foreground shrink-0">Price:</span>
         <Slider
@@ -71,7 +69,6 @@ export default function Index() {
         </span>
       </div>
 
-      {/* Products Grid */}
       {isLoading ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {Array.from({ length: 8 }).map((_, i) => (

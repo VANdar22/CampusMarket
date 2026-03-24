@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Search, Plus, MessageCircle, User, LogOut, Package, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,14 +12,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useState, useEffect } from "react";
 
-interface NavbarProps {
-  searchQuery: string;
-  onSearchChange: (query: string) => void;
-}
-
-export function Navbar({ searchQuery, onSearchChange }: NavbarProps) {
+export function Navbar() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
@@ -30,6 +27,15 @@ export function Navbar({ searchQuery, onSearchChange }: NavbarProps) {
       root.classList.remove("dark");
     }
   }, [isDark]);
+
+  const handleSearch = (value: string) => {
+    setSearchQuery(value);
+    if (value) {
+      setSearchParams({ q: value });
+    } else {
+      setSearchParams({});
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b bg-card/80 backdrop-blur-lg">
@@ -45,7 +51,7 @@ export function Navbar({ searchQuery, onSearchChange }: NavbarProps) {
             <Input
               placeholder="Search products..."
               value={searchQuery}
-              onChange={(e) => onSearchChange(e.target.value)}
+              onChange={(e) => handleSearch(e.target.value)}
               className="pl-10 bg-secondary border-0 focus-visible:ring-primary"
             />
           </div>
