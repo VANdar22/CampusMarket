@@ -12,7 +12,8 @@ type Product = Database["public"]["Tables"]["products"]["Row"];
 export default function Index() {
   const [category, setCategory] = useState("all");
   const [priceRange, setPriceRange] = useState([0, 500]);
-  const [searchQuery] = useState("");
+  const searchParams = new URLSearchParams(window.location.search);
+  const searchQuery = searchParams.get("q") || "";
 
   const { data: products, isLoading } = useQuery({
     queryKey: ["products", category, priceRange],
