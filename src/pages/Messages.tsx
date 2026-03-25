@@ -26,6 +26,7 @@ export default function Messages() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [avatars, setAvatars] = useState<Record<string, string>>({});
+  const [sellerProfiles, setSellerProfiles] = useState<Record<string, any>>({});
 
   // Redirect to auth if not logged in
   useEffect(() => {
@@ -47,6 +48,26 @@ export default function Messages() {
       return data;
     },
   });
+
+  // Fetch seller profiles
+  useEffect(() => {
+    if (!conversations) return;
+
+    const sellerIds = Array.from(
+      new Set(conversations.map((conv: any) => conv.products?.user_id))
+    );
+
+    sellerIds.forEach(async (sellerId) => {
+      if (!sellerProfiles[sellerId]) {
+        const { data } = await supabase
+          .from("profiles")
+          .select("display_name")
+          .eq("user_id", sellerId)
+          .single();
+        setSellerProfiles((prev) => ({ ...prev, [sellerId]: data || { display_name: "Anonymous" } }));
+      }
+    });
+  }, [conversations, sellerProfiles]);
 
   // Delete conversation
   const handleDeleteConversation = async (conversationId: string) => {
@@ -111,6 +132,7 @@ export default function Messages() {
             const sellerId = conv.products?.user_id;
             const avatar = avatars[sellerId];
             const unreadCount = getUnreadCount(conv);
+            const sellerName = sellerProfiles[sellerId]?.display_name || "Anonymous";
 
             return (
               <Card
@@ -123,7 +145,7 @@ export default function Messages() {
                   {avatar ? (
                     <img
                       src={avatar}
-                      alt="Seller Avatar"
+                      alt={`${sellerName} Avatar`}
                       className="h-full w-full object-cover"
                     />
                   ) : (
@@ -131,13 +153,16 @@ export default function Messages() {
                   )}
                 </div>
 
-                {/* Product Info */}
+                {/* Product & Seller Info */}
                 <div className="flex-1 min-w-0">
                   <p className="font-medium text-foreground truncate">
                     {conv.products?.title || "Product"}
                   </p>
                   <p className="text-sm text-primary font-semibold">
                     GHS{Number(conv.products?.price || 0).toFixed(2)}
+                  </p>
+                  <p className="text-xs text-muted-foreground truncate">
+                    Seller: {sellerName}
                   </p>
                 </div>
 
@@ -148,7 +173,7 @@ export default function Messages() {
                   </div>
                 )}
 
-                {/* Delete Button + Minimal Dialog */}
+                {/* Delete Button */}
                 <div
                   className="absolute top-3 right-3"
                   onClick={(e) => e.stopPropagation()}
@@ -175,14 +200,10 @@ export default function Messages() {
                       </AlertDialogHeader>
 
                       <AlertDialogFooter>
-                        <AlertDialogCancel>
-                          Cancel
-                        </AlertDialogCancel>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <AlertDialogAction
-                          className=" bg-destructive hover:bg-destructive/70"
-                          onClick={() =>
-                            handleDeleteConversation(conv.id)
-                          }
+                          className="bg-destructive hover:bg-destructive/70"
+                          onClick={() => handleDeleteConversation(conv.id)}
                         >
                           Delete
                         </AlertDialogAction>
@@ -190,7 +211,6 @@ export default function Messages() {
                     </AlertDialogContent>
                   </AlertDialog>
                 </div>
-
               </Card>
             );
           })}

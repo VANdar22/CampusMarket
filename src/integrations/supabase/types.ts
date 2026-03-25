@@ -134,6 +134,7 @@ export type Database = {
         Row: {
           avatar_url: string | null
           bio: string | null
+          phone_number: string | null
           created_at: string
           display_name: string | null
           id: string

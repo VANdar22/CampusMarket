@@ -15,7 +15,7 @@ type Product = Database["public"]["Tables"]["products"]["Row"];
 
 export default function Index() {
   const [category, setCategory] = useState("all");
-  const [priceRange, setPriceRange] = useState([0, 100000]);
+  const [priceRange, setPriceRange] = useState([0, 1000000]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
   

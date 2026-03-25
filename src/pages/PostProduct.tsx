@@ -216,7 +216,7 @@ export default function PostProduct() {
               </div>
 
               <div className="space-y-2">
-                <Label>Price (£)</Label>
+                <Label>Price (GHS)</Label>
                 <Input
                   type="number"
                   value={price}

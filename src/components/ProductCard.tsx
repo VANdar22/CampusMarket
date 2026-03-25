@@ -43,33 +43,29 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
 
           {/* Content */}
-          <div className="space-y-1">
-            
-            {/* Category (clean text like second design) */}
-            <p className="text-sm font-light text-muted-foreground">
-              {categoryLabels[product.category]?.replace(/^.+\s/, "") || product.category}
-            </p>
+          <div className="space-y-1 sm:space-y-2">
+  <p className="text-xs sm:text-sm font-light text-muted-foreground">
+    {categoryLabels[product.category]?.replace(/^.+\s/, "") || product.category}
+  </p>
 
-            {/* Title + Price */}
-            <div className="flex justify-between items-center">
-              <h3 className="text-sm font-medium text-foreground truncate">
-                {product.title}
-              </h3>
-              <p className="text-sm font-light text-foreground ml-2">
-                GHS {Number(product.price).toFixed(2)}
-              </p>
-            </div>
+  <div className="flex flex-wrap justify-between items-center gap-1">
+    <h3 className="text-sm sm:text-base font-medium text-foreground line-clamp-2">
+      {product.title}
+    </h3>
+    <p className="text-xs sm:text-sm font-light text-foreground">
+      GHS {Number(product.price).toFixed(2)}
+    </p>
+  </div>
 
-            {/* Keep original logic (Negotiable badge) */}
-            {product.is_negotiable && (
-              <Badge
-                variant="outline"
-                className="text-xs font-normal text-primary border-primary/30 mt-1"
-              >
-                Negotiable
-              </Badge>
-            )}
-          </div>
+  {product.is_negotiable && (
+    <Badge
+      variant="outline"
+      className="text-[10px] sm:text-xs font-normal text-primary border-primary/30 mt-1"
+    >
+      Negotiable
+    </Badge>
+  )}
+</div>
 
         </CardContent>
       </Card>

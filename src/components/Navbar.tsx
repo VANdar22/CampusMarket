@@ -1,6 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
 import { User, LogOut, Package, Sun, Moon } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -43,13 +42,13 @@ export function Navbar() {
   }, [isDark]);
 
   const navItems = [
-    { name: "Browse", href: "/" },
-    { name: "Sell", href: "/post" },
-    { name: "Messages", href: "/messages" },
+    { name: "Browse", href: "#/" },
+    { name: "Sell", href: "#/post-product" },
+    { name: "Messages", href: "#/messages" },
   ];
 
   return (
-    <header className="sticky top-0 z-50 border-b backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b backdrop-blur-md bg-background">
       <div className="relative flex items-center justify-between h-16 px-6 max-w-7xl mx-auto">
 
         {/* Mobile hamburger */}
@@ -67,24 +66,24 @@ export function Navbar() {
         {/* Desktop nav */}
         <div className="hidden lg:flex space-x-8">
           {navItems.map((item) => (
-            <Link
+            <a
               key={item.name}
-              to={item.href}
-              className="text-sm font-light text-muted-foreground hover:text-foreground transition"
+              href={item.href}
+              className="text-sm font-light text-primary hover:text-foreground transition"
             >
               {item.name}
-            </Link>
+            </a>
           ))}
         </div>
 
         {/* Logo */}
-        <div className="absolute left-1/2 -translate-x-1/2  ">
-          <Link to="/" className="text-lg font-light tracking-wide text-foreground">
+        <div className="absolute left-1/2 -translate-x-1/2">
+          <a href="#/" className="text-lg font-light tracking-wide text-foreground">
             <img src={icon} alt="Icon" className="h-16 w-16 object-contain" />
-          </Link>
+          </a>
         </div>
 
-        {/* Mobile Logo (Right Side) */}
+        {/* Mobile avatar */}
         <div className="lg:hidden">
           <Link to="/profile">
             {avatarUri ? (
@@ -153,15 +152,15 @@ export function Navbar() {
       {isMobileMenuOpen && (
         <div className="lg:hidden border-t bg-background">
           <div className="px-6 py-6 space-y-6">
-          {navItems.map((item) => (
-              <Link
+            {navItems.map((item) => (
+              <a
                 key={item.name}
-                to={item.href}
+                href={item.href}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="block text-lg font-light text-foreground"
               >
                 {item.name}
-              </Link>
+              </a>
             ))}
 
             {user ? (
@@ -196,10 +195,7 @@ export function Navbar() {
 
             {/* Mobile Dark Mode Toggle */}
             <div className="flex items-center justify-between">
-              <span className="text-lg font-light text-muted-foreground">
-              Mode
-              </span>
-
+              <span className="text-lg font-light text-muted-foreground">Mode</span>
               <div className="relative flex items-center">
                 <Switch
                   checked={isDark}
@@ -215,11 +211,11 @@ export function Navbar() {
                 </div>
               </div>
             </div>
-
-           
           </div>
         </div>
       )}
     </header>
   );
 }
+
+export default Navbar;

@@ -17,7 +17,7 @@ export default function MyListings() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (!user) navigate("/auth");
+    if (!user) navigate("#/auth");
   }, [user, navigate]);
 
   const { data: products, isLoading } = useQuery({
@@ -54,7 +54,7 @@ export default function MyListings() {
           </Button>
           <h1 className="text-2xl font-bold text-foreground">My Listings</h1>
         </div>
-        <Button size="icon" onClick={() => navigate("/post")}>
+        <Button size="icon" onClick={() => navigate("/post-product")}>
           <Plus className="h-4 w-4" />
         </Button>
       </div>
@@ -99,7 +99,7 @@ export default function MyListings() {
           <span className="text-5xl mb-4">📦</span>
           <h2 className="text-lg font-semibold">No listings yet</h2>
           <p className="text-muted-foreground mb-4">Start selling by listing your first product.</p>
-          <Button onClick={() => navigate("/post")}>List a Product</Button>
+          <Button onClick={() => navigate("/post-product")}>List a Product</Button>
         </div>
       )}
     </div>
