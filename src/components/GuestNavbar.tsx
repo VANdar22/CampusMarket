@@ -9,7 +9,7 @@ export default function GuestNavBar() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-6 py-3 flex justify-between items-center">
         {/* Logo / Site Name */}
         <Link to="/" className="flex items-center gap-2">
-          <img className="w-10 h-10 sm:w-12 sm:h-12" src={Logo} alt="Logo" />
+          <img className="w-16 h-16 sm:w-12 sm:h-12" src={Logo} alt="Logo" />
         </Link>
 
         {/* Navigation Links */}
