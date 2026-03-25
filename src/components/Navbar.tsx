@@ -80,7 +80,7 @@ export function Navbar() {
         {/* Logo */}
         <div className="absolute left-1/2 -translate-x-1/2">
           <Link to="/" className="text-lg font-light tracking-wide text-foreground">
-            <img src={icon} alt="Icon" className="h-12 w-12 object-contain" />
+            <img src={icon} alt="Icon" className="h-16 w-16 object-contain" />
           </Link>
         </div>
 
