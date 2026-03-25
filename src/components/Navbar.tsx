@@ -9,7 +9,9 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  
 } from "@/components/ui/dropdown-menu";
+import { Switch } from "@/components/ui/switch";
 import { useState, useEffect } from "react";
 import { createAvatar } from "@dicebear/core";
 import * as Adventurer from "@dicebear/adventurer";
@@ -104,9 +106,21 @@ export function Navbar() {
         {/* Desktop right menu */}
         <div className="hidden lg:flex items-center gap-2">
           {/* Dark mode toggle */}
-          <Button variant="ghost" size="icon" onClick={() => setIsDark(!isDark)}>
-            {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-          </Button>
+          <div className="relative flex items-center">
+  <Switch
+    checked={isDark}
+    onCheckedChange={(checked) => setIsDark(checked)}
+    className="h-6 w-11"
+  />
+
+  <div className="pointer-events-none absolute left-1 flex items-center h-6">
+    {isDark ? (
+      <Moon className="h-3.5 w-3.5 text-white translate-x-5 transition-transform duration-200" />
+    ) : (
+      <Sun className="h-3.5 w-3.5 text translate-x-0 transition-transform duration-200" />
+    )}
+  </div>
+</div>
 
           {user ? (
             <DropdownMenu>
