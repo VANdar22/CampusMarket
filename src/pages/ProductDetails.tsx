@@ -53,25 +53,25 @@ const ProductImageGallery = ({ images }: ProductImageGalleryProps) => {
 
   if (!images || images.length === 0)
     return (
-      <div className="aspect-16/9 bg-muted flex items-center justify-center text-6xl">
+      <div className="aspect-video h-full w-full bg-muted flex items-center justify-center text-6xl">
         📦
       </div>
     );
 
   return (
-    <div className="w-full">
+    <div className="w-full h-full">
       {/* Desktop gallery */}
       <div className="hidden lg:flex flex-col space-y-4">
         {images.map((img, index) => (
           <div
             key={index}
-            className="w-full max-h-[500px] overflow-hidden gap-2 cursor-pointer"
+            className="w-full  max-h-[500px] overflow-hidden gap-2 object-cover cursor-pointer"
             onClick={() => setCurrentIndex(index)}
           >
             <img
               src={img}
               alt={`Product view ${index + 1}`}
-              className="w-full max-h-[500px] object-contain bg-muted transition-transform duration-300"
+              className="w-full max-h-[500px] object-cover bg-muted transition-transform duration-300"
             />
           </div>
         ))}
@@ -88,7 +88,7 @@ const ProductImageGallery = ({ images }: ProductImageGalleryProps) => {
           <img
             src={images[currentIndex]}
             alt={`Product view ${currentIndex + 1}`}
-            className="w-full h-full object-contain bg-muted transition-transform duration-300 select-none"
+            className="w-full h-full object-cover bg-muted transition-transform duration-300 select-none"
           />
         </div>
         <div className="flex justify-center mt-4 gap-2">
