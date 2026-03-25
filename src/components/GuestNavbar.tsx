@@ -5,21 +5,29 @@ import Logo from "../images/icon.png";
 
 export default function GuestNavBar() {
   return (
-    <nav className="bg-background backdrop-blur-lg border-muted-foreground">
-      <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+    <nav className="bg-background backdrop-blur-lg">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-6 py-3 flex justify-between items-center">
         {/* Logo / Site Name */}
-        <Link to="/" className="text-xl font-bold text-primary">
-          <img className="w-12 h-12" src={Logo} alt="Logo" />
+        <Link to="/" className="flex items-center gap-2">
+          <img className="w-10 h-10 sm:w-12 sm:h-12" src={Logo} alt="Logo" />
         </Link>
 
         {/* Navigation Links */}
-        <div className="flex items-center gap-4">
-          <p className="text-md font-medium text-muted-foreground">
-            Please sign in to join the CampusMarket community
+        <div className="flex items-center gap-3">
+          {/* Shorter text on mobile */}
+          <p className="text-sm sm:text-md font-medium text-muted-foreground whitespace-nowrap">
+            <span className="sm:hidden">Sign in to join</span>
+            <span className="hidden sm:inline">
+              Please sign in to join the CampusMarket community
+            </span>
           </p>
 
           <Link to="/auth">
-            <Button variant="outline" className="text-primary border-2" size="sm">
+            <Button
+              variant="outline"
+              className="text-primary border-2"
+              size="sm"
+            >
               Sign In
             </Button>
           </Link>

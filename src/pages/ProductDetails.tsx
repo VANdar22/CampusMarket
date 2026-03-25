@@ -65,7 +65,7 @@ const ProductImageGallery = ({ images }: ProductImageGalleryProps) => {
         {images.map((img, index) => (
           <div
             key={index}
-            className="w-full  max-h-[500px] overflow-hidden gap-2 object-cover cursor-pointer"
+            className="w-full  gap-2 object-cover cursor-pointer"
             onClick={() => setCurrentIndex(index)}
           >
             <img
