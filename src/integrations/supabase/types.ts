@@ -93,6 +93,7 @@ export type Database = {
           created_at: string
           description: string | null
           id: string
+          image_urls: string[] | null
           image_url: string | null
           is_negotiable: boolean
           is_sold: boolean

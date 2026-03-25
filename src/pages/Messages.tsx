@@ -6,39 +6,72 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MessageCircle, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { createAvatar } from "@dicebear/core";
+import * as Adventurer from "@dicebear/adventurer";
 
 export default function Messages() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [avatars, setAvatars] = useState<Record<string, string>>({});
 
+  // Redirect to auth if not logged in
   useEffect(() => {
     if (!user) navigate("/auth");
   }, [user, navigate]);
 
+  // Fetch conversations and related products
   const { data: conversations, isLoading } = useQuery({
     queryKey: ["conversations", user?.id],
     enabled: !!user,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("conversations")
-        .select("*, products(title, image_url, price)")
+        .select("*, products(id, title, image_url, price, user_id)")
         .or(`buyer_id.eq.${user!.id},seller_id.eq.${user!.id}`)
         .order("updated_at", { ascending: false });
+
       if (error) throw error;
       return data;
     },
   });
 
+  // Generate DiceBear avatars for each seller/buyer
+  useEffect(() => {
+    if (!conversations) return;
+
+    const newAvatars: Record<string, string> = {};
+    conversations.forEach((conv: any) => {
+      // Always use product.user_id (seller) for avatar
+      const sellerId = conv.products?.user_id;
+      if (sellerId && !newAvatars[sellerId]) {
+        newAvatars[sellerId] = createAvatar(Adventurer, {
+          seed: sellerId,
+          size: 32,
+          backgroundColor: ["b6e3f4", "c0aede", "d1d4f9"],
+        }).toDataUri();
+      }
+    });
+
+    setAvatars(newAvatars);
+  }, [conversations]);
+
+  // Count unread messages for the current user
+  const getUnreadCount = (conv: any) => {
+    if (!conv.messages) return 0;
+    return conv.messages.filter((msg: any) => !msg.read && msg.sender_id !== user?.id).length;
+  };
+
   return (
     <div className="mx-auto max-w-2xl px-4 py-6 space-y-6">
+      {/* Header */}
       <div className="flex items-center gap-3">
-        <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
-          <ArrowLeft className="h-4 w-4" />
-        </Button>
-        <h1 className="text-2xl font-bold text-foreground">Messages</h1>
+        <h1 className="text-2xl font-medium text-foreground">
+          Messages {conversations?.length ? `(${conversations.length})` : ""}
+        </h1>
       </div>
 
+      {/* Loading Skeleton */}
       {isLoading ? (
         <div className="space-y-3">
           {Array.from({ length: 4 }).map((_, i) => (
@@ -47,26 +80,45 @@ export default function Messages() {
         </div>
       ) : conversations && conversations.length > 0 ? (
         <div className="space-y-3">
-          {conversations.map((conv: any) => (
-            <Card
-              key={conv.id}
-              className="p-4 flex items-center gap-4 cursor-pointer hover:shadow-md transition-shadow border"
-              onClick={() => navigate(`/chat/${conv.id}`)}
-            >
-              <div className="h-14 w-14 rounded-xl bg-muted overflow-hidden shrink-0">
-                {conv.products?.image_url ? (
-                  <img src={conv.products.image_url} alt="" className="h-full w-full object-cover" />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center text-2xl">📦</div>
+          {conversations.map((conv: any) => {
+            const sellerId = conv.products?.user_id;
+            const avatar = avatars[sellerId];
+            const unreadCount = getUnreadCount(conv);
+
+            return (
+              <Card
+                key={conv.id}
+                className="p-4 flex items-center gap-4 cursor-pointer hover:shadow-md transition-shadow border relative"
+                onClick={() => navigate(`/chat/${conv.id}`)}
+              >
+                {/* Seller Avatar */}
+                <div className="h-14 w-14 rounded-full overflow-hidden shrink-0 bg-muted flex items-center justify-center">
+                  {avatar ? (
+                    <img src={avatar} alt="Seller Avatar" className="h-full w-full object-cover" />
+                  ) : (
+                    <div className="text-2xl">👤</div>
+                  )}
+                </div>
+
+                {/* Product Info */}
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium text-foreground truncate">{conv.products?.title || "Product"}</p>
+                  <p className="text-sm text-primary font-semibold">
+                    GHS{Number(conv.products?.price || 0).toFixed(2)}
+                  </p>
+                </div>
+
+                {/* Unread Badge */}
+                {unreadCount > 0 && (
+                  <div className="absolute top-2 right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
+                    {unreadCount}
+                  </div>
                 )}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-medium text-foreground truncate">{conv.products?.title || "Product"}</p>
-                <p className="text-sm text-primary font-semibold">£{Number(conv.products?.price || 0).toFixed(2)}</p>
-              </div>
-              <MessageCircle className="h-5 w-5 text-muted-foreground shrink-0" />
-            </Card>
-          ))}
+
+                <MessageCircle className="h-5 w-5 text-muted-foreground shrink-0" />
+              </Card>
+            );
+          })}
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center py-20 text-center">

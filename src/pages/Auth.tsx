@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useToast } from "@/hooks/use-toast";
 import { Package } from "lucide-react";
 import { useEffect } from "react";
+import icon from "../images/icon.png"
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -55,12 +56,12 @@ export default function Auth() {
 
   return (
     <div className="flex min-h-[80vh] items-center justify-center px-4">
-      <Card className="w-full max-w-md border-0 shadow-xl">
+      <Card className="w-full max-w-md border-0 shadow-lg rounded-none">
         <CardHeader className="text-center space-y-3">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
-            <Package className="h-7 w-7 text-primary" />
+          <div className="mx-auto flex h-16 w-16 items-center justify-center ">
+            <img src={icon} alt="Icon" className="h-18 w-18" />
           </div>
-          <CardTitle className="text-2xl">{isLogin ? "Welcome back" : "Create account"}</CardTitle>
+          <CardTitle className="text-4xl text-light">{isLogin ? "Welcome back" : "Create account"}</CardTitle>
           <CardDescription>
             {isLogin ? "Sign in to your CampusMarket account" : "Join the student marketplace"}
           </CardDescription>
@@ -75,7 +76,7 @@ export default function Auth() {
             )}
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@university.ac.uk" required />
+              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@university.ac.gh" required />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>

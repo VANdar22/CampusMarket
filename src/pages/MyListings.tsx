@@ -54,8 +54,8 @@ export default function MyListings() {
           </Button>
           <h1 className="text-2xl font-bold text-foreground">My Listings</h1>
         </div>
-        <Button onClick={() => navigate("/post")} className="gap-1.5">
-          <Plus className="h-4 w-4" /> New
+        <Button size="icon" onClick={() => navigate("/post")}>
+          <Plus className="h-4 w-4" />
         </Button>
       </div>
 
@@ -79,7 +79,7 @@ export default function MyListings() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-medium text-foreground truncate">{product.title}</p>
-                  <p className="text-sm font-semibold text-primary">£{Number(product.price).toFixed(2)}</p>
+                  <p className="text-sm font-semibold text-primary">GHS {Number(product.price).toFixed(2)}</p>
                   {product.is_sold && <Badge variant="destructive" className="mt-1 text-xs">Sold</Badge>}
                 </div>
                 <div className="flex gap-2 shrink-0">

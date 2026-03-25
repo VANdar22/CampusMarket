@@ -114,7 +114,7 @@ export default function EditProduct() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="price">Price (£)</Label>
+                <Label htmlFor="price">Price (GHS)</Label>
                 <Input id="price" type="number" min="0" step="0.01" value={price} onChange={(e) => setPrice(e.target.value)} required />
               </div>
             </div>
