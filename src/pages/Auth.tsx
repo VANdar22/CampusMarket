@@ -82,7 +82,7 @@ export default function Auth() {
               <Label htmlFor="password">Password</Label>
               <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" required minLength={6} />
             </div>
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button variant="default" type="submit" className="w-full" disabled={loading}>
               {loading ? "Loading..." : isLogin ? "Sign In" : "Create Account"}
             </Button>
           </form>

@@ -3,7 +3,7 @@ import { HashRouter, Routes, Route } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { AuthProvider } from "@/contexts/AuthContext";
+import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
@@ -15,9 +15,25 @@ import Profile from "./pages/Profile";
 import MyListings from "./pages/MyListings";
 import EditProduct from "./pages/EditProduct";
 import NotFound from "./pages/NotFound";
-import NavBar from "./components/Navbar"; // <-- import your NavBar
+
+import NavBar from "./components/Navbar"; // full-featured
+import GuestNavBar from "./components/GuestNavbar"; // simpler NavBar for signed-out users
+
+const hideGuestNav = location.pathname === "/auth";
 
 const queryClient = new QueryClient();
+
+const AppLayout = ({ children }: { children: React.ReactNode }) => {
+  const { user } = useAuth();
+
+  return (
+    <>
+    {user && <NavBar />}
+    {!user && !hideGuestNav && <GuestNavBar />}
+    {children}
+  </>
+  );
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -26,8 +42,7 @@ const App = () => (
       <Sonner />
       <AuthProvider>
         <HashRouter>
-          <NavBar />
-
+          <AppLayout>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<Auth />} />
@@ -40,6 +55,7 @@ const App = () => (
               <Route path="/edit-product/:id" element={<EditProduct />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
+          </AppLayout>
         </HashRouter>
       </AuthProvider>
     </TooltipProvider>
