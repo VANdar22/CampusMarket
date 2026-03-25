@@ -53,7 +53,7 @@ const ProductImageGallery = ({ images }: ProductImageGalleryProps) => {
 
   if (!images || images.length === 0)
     return (
-      <div className="aspect-square bg-muted flex items-center justify-center text-6xl">
+      <div className="aspect-16/9 bg-muted flex items-center justify-center text-6xl">
         📦
       </div>
     );
@@ -71,7 +71,7 @@ const ProductImageGallery = ({ images }: ProductImageGalleryProps) => {
             <img
               src={img}
               alt={`Product view ${index + 1}`}
-              className="w-full h-full object-contain bg-muted transition-transform duration-300"
+              className="w-full max-h-[500px] object-contain bg-muted transition-transform duration-300"
             />
           </div>
         ))}
@@ -142,6 +142,7 @@ export default function ProductDetails() {
       return data;
     },
   });
+
   useEffect(() => {
     if (user) {
       const svg = createAvatar(Adventurer, {
@@ -153,7 +154,6 @@ export default function ProductDetails() {
     }
   }, [user]);
 
-  // Generate DiceBear avatar for seller
   useEffect(() => {
     if (seller) {
       const svg = createAvatar(Adventurer, {
@@ -271,14 +271,12 @@ export default function ProductDetails() {
                   </div>
                 </div>
 
-                {/* Display bio if available */}
                 {seller.bio && (
                   <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
                     {seller.bio}
                   </p>
                 )}
 
-                {/* Display phone number if available */}
                 {seller.phone_number && (
                   <a href={`tel:${seller.phone_number}`}>
                     <div className="flex items-center gap-2 text-sm font-medium mt-1">
@@ -288,6 +286,7 @@ export default function ProductDetails() {
                 )}
               </Card>
             )}
+
             {!isOwner && (
               <div className="flex gap-3">
                 <Button onClick={handleMessageSeller} className="flex-1 gap-2">
