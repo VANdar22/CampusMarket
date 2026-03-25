@@ -241,7 +241,7 @@ export default function ProductDetails() {
             </h1>
 
             <div className="flex items-center gap-3">
-              <span className="text-3xl font-bold text-primary">
+              <span className="text-3xl font-md text-primary">
                 GHS {Number(product.price).toFixed(2)}
               </span>
               {product.is_negotiable && (
