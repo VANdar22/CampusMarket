@@ -78,9 +78,20 @@ export function Navbar() {
         </div>
 
         {/* Logo */}
-        <div className="absolute left-1/2 -translate-x-1/2">
+        <div className="absolute left-1/2 -translate-x-1/2  ">
           <Link to="/" className="text-lg font-light tracking-wide text-foreground">
             <img src={icon} alt="Icon" className="h-16 w-16 object-contain" />
+          </Link>
+        </div>
+
+        {/* Mobile Logo (Right Side) */}
+        <div className="lg:hidden">
+          <Link to="/profile">
+            {avatarUri ? (
+              <img src={avatarUri} alt="Avatar" className="h-8 w-8 rounded-full object-cover" />
+            ) : (
+              <User className="h-5 w-5" />
+            )}
           </Link>
         </div>
 
