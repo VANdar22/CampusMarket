@@ -40,6 +40,7 @@ export function ProductCard({ product }: { product: Product }) {
               productId={product.id}
               className="absolute top-2 right-2 z-10"
             />
+            {product.image_urls && product.image_urls.length > 0 ? (
               <img
                 src={product.image_urls[0]}
                 alt={product.title}
