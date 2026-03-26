@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { ProductCard } from "@/components/ProductCard";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { Skeleton } from "@/components/ui/skeleton";
+import { EmptyState } from "@/components/EmptyState";
 import type { Database } from "@/integrations/supabase/types";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -139,7 +140,11 @@ export default function Index() {
             ) : searchedProducts && searchedProducts.length > 0 ? (
               <ProductGrid products={searchedProducts} />
             ) : (
-              <p className="text-muted-foreground">No products found</p>
+              <EmptyState
+                emoji="🔍"
+                title="No products found"
+                description={`We couldn't find anything matching "${searchQuery}". Try a different search term.`}
+              />
             )}
           </section>
         )}
