@@ -8,6 +8,8 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, LucidePhone, MessageCircle, Tag } from "lucide-react";
+import { WishlistButton } from "@/components/WishlistButton";
+import { SellerReviews } from "@/components/SellerReviews";
 import { useState, useRef, useEffect } from "react";
 import { createAvatar } from "@dicebear/core";
 import * as Adventurer from "@dicebear/adventurer";
@@ -253,9 +255,12 @@ const { data: relatedProducts, isLoading: relatedLoading } = useQuery({
             <Badge variant="secondary">
               {categoryLabels[product.category]}
             </Badge>
-            <h1 className="text-2xl md:text-3xl font-semibold">
-              {product.title}
-            </h1>
+            <div className="flex items-center justify-between">
+              <h1 className="text-2xl md:text-3xl font-semibold">
+                {product.title}
+              </h1>
+              <WishlistButton productId={product.id} size="md" />
+            </div>
 
             <div className="flex items-center gap-3">
               <span className="text-3xl font-md text-primary">
@@ -308,6 +313,14 @@ const { data: relatedProducts, isLoading: relatedLoading } = useQuery({
                   </a>
                 )}
               </Card>
+            )}
+
+            {/* Seller Reviews */}
+            {seller && (
+              <SellerReviews
+                sellerId={seller.user_id}
+                sellerName={seller.display_name || "Anonymous"}
+              />
             )}
 
             {!isOwner && (

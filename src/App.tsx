@@ -14,6 +14,7 @@ import Chat from "./pages/Chat";
 import Profile from "./pages/Profile";
 import MyListings from "./pages/MyListings";
 import EditProduct from "./pages/EditProduct";
+import Wishlist from "./pages/Wishlist";
 import NotFound from "./pages/NotFound";
 import Category from "./pages/Category";
 
@@ -55,6 +56,7 @@ const App = () => (
               <Route path="/profile" element={<Profile />} />
               <Route path="/my-listings" element={<MyListings />} />
               <Route path="/edit-product/:id" element={<EditProduct />} />
+              <Route path="/wishlist" element={<Wishlist />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </AppLayout>
