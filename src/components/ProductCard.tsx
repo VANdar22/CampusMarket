@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { WishlistButton } from "@/components/WishlistButton";
 import type { Database } from "@/integrations/supabase/types";
 
 type Product = Database["public"]["Tables"]["products"]["Row"];
@@ -35,7 +36,10 @@ export function ProductCard({ product }: { product: Product }) {
         <CardContent className="p-0">
           {/* Image */}
           <div className="aspect-square mb-3 overflow-hidden bg-muted/10 relative">
-            {product.image_urls && product.image_urls.length > 0 ? (
+            <WishlistButton
+              productId={product.id}
+              className="absolute top-2 right-2 z-10"
+            />
               <img
                 src={product.image_urls[0]}
                 alt={product.title}
