@@ -93,16 +93,16 @@ export type Database = {
           created_at: string
           description: string | null
           id: string
-          image_urls: string[] | null
           image_url: string | null
+          image_urls: string[] | null
           is_negotiable: boolean
           is_sold: boolean
           price: number
+          school: string | null
           title: string
           updated_at: string
           user_id: string
-          views: number
-          school: string | null
+          views: number | null
         }
         Insert: {
           category?: Database["public"]["Enums"]["product_category"]
@@ -110,14 +110,15 @@ export type Database = {
           description?: string | null
           id?: string
           image_url?: string | null
+          image_urls?: string[] | null
           is_negotiable?: boolean
           is_sold?: boolean
           price: number
+          school?: string | null
           title: string
           updated_at?: string
           user_id: string
-          views?: number
-          school?: string | null
+          views?: number | null
         }
         Update: {
           category?: Database["public"]["Enums"]["product_category"]
@@ -125,14 +126,15 @@ export type Database = {
           description?: string | null
           id?: string
           image_url?: string | null
+          image_urls?: string[] | null
           is_negotiable?: boolean
           is_sold?: boolean
           price?: number
+          school?: string | null
           title?: string
           updated_at?: string
           user_id?: string
-          views?: number
-          school?: string | null
+          views?: number | null
         }
         Relationships: []
       }
@@ -140,13 +142,13 @@ export type Database = {
         Row: {
           avatar_url: string | null
           bio: string | null
-          phone_number: string | null
           created_at: string
           display_name: string | null
           id: string
+          phone_number: string | null
+          school: string | null
           updated_at: string
           user_id: string
-          school: string | null
         }
         Insert: {
           avatar_url?: string | null
@@ -154,9 +156,10 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           id?: string
+          phone_number?: string | null
+          school?: string | null
           updated_at?: string
           user_id: string
-          school?: string | null
         }
         Update: {
           avatar_url?: string | null
@@ -164,9 +167,10 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           id?: string
+          phone_number?: string | null
+          school?: string | null
           updated_at?: string
           user_id?: string
-          school?: string | null
         }
         Relationships: []
       }
@@ -175,7 +179,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      increment_views: { Args: { product_id: string }; Returns: undefined }
     }
     Enums: {
       product_category:
