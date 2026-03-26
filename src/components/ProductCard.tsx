@@ -22,11 +22,8 @@ export function ProductCard({ product }: { product: Product }) {
   const handleClick = async (e: React.MouseEvent) => {
     e.preventDefault(); // prevent Link's default navigation
 
-    // Increment views (fire-and-forget)
-    supabase
-      .from("products")
-      .update({ views: (product.views || 0) + 1 })
-      .eq("id", product.id);
+    // Increment views via RPC (fire-and-forget, no auth needed)
+    supabase.rpc("increment_views", { product_id: product.id });
 
     // Navigate to product detail page
     navigate(`/product/${product.id}`);
@@ -42,12 +39,14 @@ export function ProductCard({ product }: { product: Product }) {
               <img
                 src={product.image_urls[0]}
                 alt={product.title}
+                loading="lazy"
                 className="w-full h-full object-cover transition-all duration-300 group-hover:scale-105"
               />
             ) : product.image_url ? (
               <img
                 src={product.image_url}
                 alt={product.title}
+                loading="lazy"
                 className="w-full h-full object-cover"
               />
             ) : (

@@ -24,12 +24,14 @@ export default function Index() {
   /* =========================
      POPULAR PRODUCTS (MAX 12)
   ========================== */
+  const productSelect = "id,title,price,category,image_urls,image_url,is_negotiable,views";
+
   const { data: popularProducts, isLoading: isLoadingPopular } = useQuery({
     queryKey: ["popularProducts"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("products")
-        .select("*")
+        .select(productSelect)
         .eq("is_sold", false)
         .order("views", { ascending: false })
         .limit(12);
@@ -37,6 +39,8 @@ export default function Index() {
       if (error) throw error;
       return data as Product[];
     },
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   });
 
   /* =========================
@@ -47,7 +51,7 @@ export default function Index() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("products")
-        .select("*")
+        .select(productSelect)
         .eq("is_sold", false)
         .order("created_at", { ascending: false })
         .limit(20);
@@ -55,6 +59,8 @@ export default function Index() {
       if (error) throw error;
       return data as Product[];
     },
+    staleTime: 2 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   });
 
   /* =========================
@@ -68,7 +74,7 @@ export default function Index() {
 
       const { data, error } = await supabase
         .from("products")
-        .select("*")
+        .select(productSelect)
         .eq("is_sold", false)
         .or(`title.ilike.%${query}%,description.ilike.%${query}%`);
 
