@@ -6,7 +6,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft } from "lucide-react";
 import { createAvatar } from "@dicebear/core";
@@ -21,9 +33,9 @@ export default function Profile() {
   const [displayName, setDisplayName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [bio, setBio] = useState("");
+  const [school, setSchool] = useState("");
   const [avatarUri, setAvatarUri] = useState("");
 
-  // Load profile & avatar
   useEffect(() => {
     if (!user) {
       navigate("/auth");
@@ -47,36 +59,34 @@ export default function Profile() {
           setDisplayName(data.display_name || "");
           setBio(data.bio || "");
           setPhoneNumber(data.phone_number || "");
+          setSchool(data.school || "");
         }
       });
   }, [user, navigate]);
 
-  // Handle user input
   const handlePhoneChange = (value: string) => {
-    // Keep only digits
     const digits = value.replace(/\D/g, "");
     setPhoneNumber(digits);
   };
 
-  // Format number on blur: +233 XX XXX XXXX
   const handlePhoneBlur = () => {
-    let digits = phoneNumber.replace(/\D/g, ""); // remove non-digits
-    if (digits.startsWith("0")) digits = digits.slice(1); // drop leading 0
-    if (!digits.startsWith("233")) digits = "233" + digits; // prepend country code
+    let digits = phoneNumber.replace(/\D/g, "");
+    if (digits.startsWith("0")) digits = digits.slice(1);
+    if (!digits.startsWith("233")) digits = "233" + digits;
 
-    // Format as +233 XX XXX XXXX
     if (digits.length === 12) {
-      const formatted = `+${digits.slice(0, 3)} ${digits.slice(3, 5)} ${digits.slice(5, 8)} ${digits.slice(8)}`;
+      const formatted = `+${digits.slice(0, 3)} ${digits.slice(
+        3,
+        5
+      )} ${digits.slice(5, 8)} ${digits.slice(8)}`;
       setPhoneNumber(formatted);
     } else {
       setPhoneNumber("+" + digits);
     }
   };
 
-  // Validate phone
   const validatePhoneNumber = (value: string) => {
     const digits = value.replace(/\D/g, "");
-    // Should start with 233 and have 9 digits after
     return /^233\d{9}$/.test(digits);
   };
 
@@ -96,14 +106,20 @@ export default function Profile() {
         display_name: displayName,
         bio,
         phone_number: phoneNumber,
+        school, // ✅ saved to backend
       })
       .eq("user_id", user.id);
 
     if (error) {
-      toast({ title: "Error", description: error.message, variant: "destructive" });
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
     } else {
       toast({ title: "Profile updated!" });
     }
+
     setLoading(false);
   };
 
@@ -116,7 +132,11 @@ export default function Profile() {
       <Card className="border-0 shadow-lg">
         <CardHeader className="text-center">
           <div className="mx-auto h-24 w-24 mb-3 rounded-full overflow-hidden bg-primary/10">
-            <img src={avatarUri} alt="Avatar" className="h-full w-full object-cover" />
+            <img
+              src={avatarUri}
+              alt="Avatar"
+              className="h-full w-full object-cover"
+            />
           </div>
           <CardTitle>Your Profile</CardTitle>
         </CardHeader>
@@ -128,18 +148,33 @@ export default function Profile() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="name">Display Name</Label>
+            <Label>Display Name</Label>
             <Input
-              id="name"
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
             />
           </div>
 
+          {/* SCHOOL SELECT */}
           <div className="space-y-2">
-            <Label htmlFor="phone">Phone Number</Label>
+            <Label>School</Label>
+            <Select value={school} onValueChange={setSchool}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select your school" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="KNUST">KNUST</SelectItem>
+                <SelectItem value="Legon">Legon</SelectItem>
+                <SelectItem value="UCC">UCC</SelectItem>
+                <SelectItem value="UDS">UDS</SelectItem>
+                <SelectItem value="UHAS">UHAS</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label>Phone Number</Label>
             <Input
-              id="phone"
               value={phoneNumber}
               onChange={(e) => handlePhoneChange(e.target.value)}
               onBlur={handlePhoneBlur}
@@ -148,9 +183,8 @@ export default function Profile() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="bio">Bio</Label>
+            <Label>Bio</Label>
             <Textarea
-              id="bio"
               value={bio}
               onChange={(e) => setBio(e.target.value)}
               placeholder="Tell others about yourself..."

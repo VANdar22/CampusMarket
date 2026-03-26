@@ -1,134 +1,223 @@
-import { useState , useEffect } from "react";
-import { useSearchParams , useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ProductCard } from "@/components/ProductCard";
 import { CategoryFilter } from "@/components/CategoryFilter";
-import { Slider } from "@/components/ui/slider";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Database } from "@/integrations/supabase/types";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import Footer from "@/components/ui/footer";
+import HeroCarousel from "@/components/Header";
+import { Button } from "@/components/ui/button";
 
 type Product = Database["public"]["Tables"]["products"]["Row"];
 
 export default function Index() {
-  const [category, setCategory] = useState("all");
-  const [priceRange, setPriceRange] = useState([0, 1000000]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
-  
+  const [mobilePage, setMobilePage] = useState(1);
 
-  const { data: products, isLoading } = useQuery({
-    queryKey: ["products", category, priceRange],
+  const ITEMS_PER_PAGE_MOBILE = 8;
+
+  /* =========================
+     POPULAR PRODUCTS (MAX 12)
+  ========================== */
+  const { data: popularProducts, isLoading: isLoadingPopular } = useQuery({
+    queryKey: ["popularProducts"],
     queryFn: async () => {
-      let query = supabase
+      const { data, error } = await supabase
         .from("products")
         .select("*")
         .eq("is_sold", false)
-        .gte("price", priceRange[0])
-        .lte("price", priceRange[1])
-        .order("created_at", { ascending: false });
+        .order("views", { ascending: false })
+        .limit(12);
 
-      if (category !== "all") {
-        query = query.eq("category", category as Product["category"]);
-      }
-
-      const { data, error } = await query;
       if (error) throw error;
       return data as Product[];
     },
   });
+
+  /* =========================
+     NEW ITEMS (MAX 20)
+  ========================== */
+  const { data: newProducts, isLoading: isLoadingNew } = useQuery({
+    queryKey: ["newProducts"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .eq("is_sold", false)
+        .order("created_at", { ascending: false })
+        .limit(20);
+
+      if (error) throw error;
+      return data as Product[];
+    },
+  });
+
+  /* =========================
+     SEARCH (SEPARATE)
+  ========================== */
+  const { data: searchedProducts, isLoading: isSearching } = useQuery({
+    queryKey: ["searchedProducts", searchParams.get("q")],
+    queryFn: async () => {
+      const query = searchParams.get("q");
+      if (!query) return [];
+
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .eq("is_sold", false)
+        .or(`title.ilike.%${query}%,description.ilike.%${query}%`);
+
+      if (error) throw error;
+      return data as Product[];
+    },
+    enabled: !!searchParams.get("q"),
+  });
+
   const handleSearch = (value: string) => {
     setSearchQuery(value);
-    if (value) {
-      setSearchParams({ q: value });
-    } else {
-      setSearchParams({});
-    }
+    if (value.trim()) setSearchParams({ q: value });
+    else setSearchParams({});
   };
 
-  const filtered = products?.filter((p) =>
-    p.title.toLowerCase().includes(searchQuery.toLowerCase())
+  /* Mobile pagination logic */
+  const displayedNewProducts = newProducts?.slice(
+    0,
+    mobilePage * ITEMS_PER_PAGE_MOBILE
   );
+
+  const canLoadMore =
+    newProducts && displayedNewProducts.length < newProducts.length;
 
   return (
     <div className="min-h-screen flex flex-col">
-      
-      {/* MAIN CONTENT */}
+
       <div className="flex-1 mx-auto max-w-7xl px-4 py-6 space-y-6">
-  
-        <div className="mb-12 text-center py-16">
+        <div className="mb-4 text-center py-16">
           <h1 className="text-3xl md:text-5xl font-light text-foreground mb-3">
             CampusMarket
           </h1>
           <p className="text-muted-foreground font-light text-lg mb-8">
             Buy and sell with students on your campus
           </p>
-  
-          <div className="max-w-xl mx-auto relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-            <Input
-              placeholder="Search for textbooks, electronics, furniture..."
-              value={searchQuery}
-              onChange={(e) => handleSearch(e.target.value)}
-              className="pl-12 h-12 rounded-none border-border font-light"
-            />
-          </div>
         </div>
-  
-        <CategoryFilter selected={category} onSelect={setCategory} />
-  
-        <div className="flex items-center gap-4 rounded-xl bg-card p-4 border">
-          <span className="text-sm font-medium text-muted-foreground shrink-0">
-            Price:
-          </span>
-          <Slider
-            min={0}
-            max={500}
-            step={5}
-            value={priceRange}
-            onValueChange={setPriceRange}
-            className="flex-1"
+        {/* HERO */}
+
+        {/* CATEGORY */}
+        <CategoryFilter selected="" />
+
+        {/* SEARCH */}
+        <div className="max-w-xl mx-auto relative">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+          <Input
+            placeholder="Search for textbooks, electronics..."
+            value={searchQuery}
+            onChange={(e) => handleSearch(e.target.value)}
+            className="pl-12 h-12 rounded-none border-border font-light"
           />
-          <span className="text-sm font-medium text-foreground shrink-0 min-w-[90px] text-right">
-            GHS{priceRange[0]} – GHS{priceRange[1]}
-          </span>
         </div>
-  
-        {isLoading ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="space-y-3">
-                <Skeleton className="aspect-square rounded-xl" />
-                <Skeleton className="h-4 w-3/4" />
-                <Skeleton className="h-4 w-1/2" />
-              </div>
-            ))}
-          </div>
-        ) : filtered && filtered.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {filtered.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-16">
-            <p className="text-muted-foreground font-light mb-2">
-              No products found
-            </p>
-            <p className="text-sm text-muted-foreground font-light">
-              Try adjusting your filters or be the first to list something!
-            </p>
-          </div>
+
+        {/* =========================
+            SEARCH RESULTS ONLY
+        ========================== */}
+        {searchParams.get("q") && (
+          <section>
+            <h2 className="text-2xl font-light mb-6">Search Results for '{searchQuery}'</h2>
+
+            {isSearching ? (
+              <SkeletonGrid />
+            ) : searchedProducts && searchedProducts.length > 0 ? (
+              <ProductGrid products={searchedProducts} />
+            ) : (
+              <p className="text-muted-foreground">No products found</p>
+            )}
+          </section>
         )}
-  
+        
+        {/* =========================
+            POPULAR (MAX 12)
+        ========================== */}
+        {!searchParams.get("q") && (
+          <section>
+            <h2 className="text-2xl font-light mb-6">Popular products</h2>
+
+            {isLoadingPopular ? (
+              <SkeletonGrid />
+            ) : (
+              <ProductGrid products={popularProducts || []} />
+            )}
+          </section>
+        )}
+
+      
+        <HeroCarousel />
+          {/* =========================
+            NEW ITEMS (NOT FILTERED)
+        ========================== */}
+        {!searchParams.get("q") && (
+          <section>
+            <h2 className="text-2xl font-light mb-6">Recent listed items</h2>
+
+            {isLoadingNew ? (
+              <SkeletonGrid />
+            ) : (
+              <>
+                <ProductGrid products={displayedNewProducts || []} />
+
+                {/* Mobile Load More */}
+                {canLoadMore && (
+                  <div className="text-center mt-6 md:hidden">
+                    <Button
+                      variant="outline"
+                      onClick={() => setMobilePage((prev) => prev + 1)}
+                    >
+                      Load More
+                    </Button>
+                  </div>
+                )}
+              </>
+            )}
+          </section>
+        )}
+
+<Footer />
+
       </div>
-  
-      {/* ✅ FOOTER (always at bottom) */}
-      <Footer />
-  
+
+    </div>
+  );
+}
+
+/* =========================
+   REUSABLE GRID COMPONENT
+========================== */
+function ProductGrid({ products }: { products: Product[] }) {
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+      {products.map((product) => (
+        <ProductCard key={product.id} product={product} />
+      ))}
+    </div>
+  );
+}
+
+/* =========================
+   SKELETON GRID
+========================== */
+function SkeletonGrid() {
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+      {Array.from({ length: 8 }).map((_, i) => (
+        <div key={i} className="space-y-3">
+          <Skeleton className="aspect-square rounded-xl" />
+          <Skeleton className="h-4 w-3/4" />
+          <Skeleton className="h-4 w-1/2" />
+        </div>
+      ))}
     </div>
   );
 }

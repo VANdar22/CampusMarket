@@ -12,22 +12,23 @@ import { useState, useRef, useEffect } from "react";
 import { createAvatar } from "@dicebear/core";
 import * as Adventurer from "@dicebear/adventurer";
 
-// Category mapping
+import { ProductCard } from "@/components/ProductCard"; // ✅ Import your existing ProductCard
+
+// Category mapping with emojis
 const categoryLabels: Record<string, string> = {
-  books: "Books",
-  electronics: "Electronics",
-  fashion: "Fashion",
-  hostel_items: "Hostel Items",
-  stationery: "Stationery",
-  sports: "Sports",
-  other: "Other",
+  books: "📚 Books",
+  electronics: "💻 Electronics",
+  fashion: "👕 Fashion",
+  hostel_items: "🏠 Hostel Items",
+  stationery: "✏️ Stationery",
+  sports: "⚽ Sports",
+  other: "📦 Other",
 };
 
 // ----- PRODUCT IMAGE GALLERY -----
 interface ProductImageGalleryProps {
   images: string[];
 }
-
 const ProductImageGallery = ({ images }: ProductImageGalleryProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const touchStartX = useRef<number | null>(null);
@@ -143,6 +144,22 @@ export default function ProductDetails() {
     },
   });
 
+  // Fetch related products (same category, exclude current)
+const { data: relatedProducts, isLoading: relatedLoading } = useQuery({
+  queryKey: ["relatedProducts", product?.category, product?.id],
+  enabled: !!product?.category,
+  queryFn: async () => {
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .eq("category", product?.category)
+      .neq("id", product?.id) // exclude current product
+      .limit(4); // max 4 items
+    if (error) throw error;
+    return data;
+  },
+});
+
   useEffect(() => {
     if (user) {
       const svg = createAvatar(Adventurer, {
@@ -225,10 +242,10 @@ export default function ProductDetails() {
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-6xl mx-auto px-6 pt-6 flex justify-end items-center text-sm text-muted-foreground">
-        Home &gt; {categoryLabels[product.category]} &gt; {product.title}
+        Home &gt; {product.category} &gt; {product.title}
       </div>
 
-      <main className="max-w-6xl mx-auto px-6 py-6">
+      <main className="max-w-6xl mx-auto px-6 py-6 space-y-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <ProductImageGallery images={images} />
 
@@ -277,6 +294,12 @@ export default function ProductDetails() {
                   </p>
                 )}
 
+                {seller.school && (
+                  <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
+                    {seller.school}
+                  </p>
+                )}
+
                 {seller.phone_number && (
                   <a href={`tel:${seller.phone_number}`}>
                     <div className="flex items-center gap-2 text-sm font-medium mt-1">
@@ -313,6 +336,18 @@ export default function ProductDetails() {
             )}
           </div>
         </div>
+
+{relatedProducts && relatedProducts.length > 0 && (
+  <div className="mt-8">
+    <h2 className="text-2xl font-light mb-4">You Might Also Like</h2>
+
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+      {relatedProducts.map((item) => (
+        <ProductCard key={item.id} product={item} />
+      ))}
+    </div>
+  </div>
+)}
       </main>
     </div>
   );

@@ -15,6 +15,7 @@ import Profile from "./pages/Profile";
 import MyListings from "./pages/MyListings";
 import EditProduct from "./pages/EditProduct";
 import NotFound from "./pages/NotFound";
+import Category from "./pages/Category";
 
 import NavBar from "./components/Navbar"; // full-featured
 import GuestNavBar from "./components/GuestNavbar"; // simpler NavBar for signed-out users
@@ -50,6 +51,7 @@ const App = () => (
               <Route path="/post-product" element={<Post />} />
               <Route path="/messages" element={<Messages />} />
               <Route path="/chat/:id" element={<Chat />} />
+              <Route path="/category/:category" element={<Category />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/my-listings" element={<MyListings />} />
               <Route path="/edit-product/:id" element={<EditProduct />} />

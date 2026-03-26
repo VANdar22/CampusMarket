@@ -24,8 +24,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, Upload, X } from "lucide-react";
 import type { Database } from "@/integrations/supabase/types";
 
-type ProductCategory =
-  Database["public"]["Enums"]["product_category"];
+type ProductCategory = Database["public"]["Enums"]["product_category"];
 
 const categories: { value: ProductCategory; label: string }[] = [
   { value: "books", label: "📚 Books" },
@@ -37,6 +36,14 @@ const categories: { value: ProductCategory; label: string }[] = [
   { value: "other", label: "📦 Other" },
 ];
 
+const schools = [
+  { value: "KNUST", label: "KNUST" },
+  { value: "Legon", label: "University of Ghana (Legon)" },
+  { value: "UCC", label: "University of Cape Coast (UCC)" },
+  { value: "UDS", label: "University for Development Studies (UDS)" },
+  { value: "UHAS", label: "University of Health and Allied Sciences (UHAS)" },
+];
+
 export default function PostProduct() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -45,36 +52,26 @@ export default function PostProduct() {
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [category, setCategory] =
-    useState<ProductCategory>("other");
+  const [category, setCategory] = useState<ProductCategory>("other");
   const [price, setPrice] = useState("");
   const [isNegotiable, setIsNegotiable] = useState(true);
+  const [school, setSchool] = useState<string>(schools[0].value); // default first school
 
-  // ✅ MULTIPLE IMAGES
+  // Images
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
-  const handleImageChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []).slice(0, 5);
-
     setImageFiles(files);
-
-    const previews = files.map((file) =>
-      URL.createObjectURL(file)
-    );
-    setImagePreviews(previews);
+    setImagePreviews(files.map((file) => URL.createObjectURL(file)));
   };
 
-  // ❌ remove image
   const removeImage = (index: number) => {
     const newFiles = [...imageFiles];
     const newPreviews = [...imagePreviews];
-
     newFiles.splice(index, 1);
     newPreviews.splice(index, 1);
-
     setImageFiles(newFiles);
     setImagePreviews(newPreviews);
   };
@@ -86,9 +83,8 @@ export default function PostProduct() {
     setLoading(true);
 
     try {
-      let image_urls: string[] = [];
-
-      // ✅ upload all images
+      // Upload images
+      const image_urls: string[] = [];
       for (const file of imageFiles) {
         const ext = file.name.split(".").pop();
         const path = `${user.id}/${Date.now()}-${Math.random()}.${ext}`;
@@ -106,6 +102,7 @@ export default function PostProduct() {
         image_urls.push(data.publicUrl);
       }
 
+      // Insert product with selected school
       const { error } = await supabase.from("products").insert({
         user_id: user.id,
         title,
@@ -114,14 +111,14 @@ export default function PostProduct() {
         price: parseFloat(price),
         is_negotiable: isNegotiable,
         image_urls,
+        school, // ✅ selected school from dropdown
       });
 
       if (error) throw error;
 
       toast({
         title: "Product listed!",
-        description:
-          "Your item is now visible to other students.",
+        description: "Your item is now visible to other students.",
       });
 
       navigate("/my-listings");
@@ -143,34 +140,23 @@ export default function PostProduct() {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-6 space-y-6">
-      <Button
-        variant="ghost"
-        onClick={() => navigate(-1)}
-        className="gap-2"
-      >
+      <Button variant="ghost" onClick={() => navigate(-1)} className="gap-2">
         <ArrowLeft className="h-4 w-4" /> Back
       </Button>
 
       <Card className="border-0 shadow-lg">
         <CardHeader>
-          <CardTitle className="text-2xl">
-            List a Product
-          </CardTitle>
+          <CardTitle className="text-2xl">List a Product</CardTitle>
         </CardHeader>
 
         <CardContent>
-          <form
-            onSubmit={handleSubmit}
-            className="space-y-5"
-          >
+          <form onSubmit={handleSubmit} className="space-y-5">
             {/* Title */}
             <div className="space-y-2">
               <Label>Title</Label>
               <Input
                 value={title}
-                onChange={(e) =>
-                  setTitle(e.target.value)
-                }
+                onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. Calculus Textbook"
                 required
               />
@@ -181,33 +167,26 @@ export default function PostProduct() {
               <Label>Description</Label>
               <Textarea
                 value={description}
-                onChange={(e) =>
-                  setDescription(e.target.value)
-                }
+                onChange={(e) => setDescription(e.target.value)}
                 placeholder="Describe your item..."
                 rows={4}
               />
             </div>
 
-            {/* Category + Price */}
+            {/* Category & Price */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Category</Label>
                 <Select
                   value={category}
-                  onValueChange={(v) =>
-                    setCategory(v as ProductCategory)
-                  }
+                  onValueChange={(v) => setCategory(v as ProductCategory)}
                 >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     {categories.map((c) => (
-                      <SelectItem
-                        key={c.value}
-                        value={c.value}
-                      >
+                      <SelectItem key={c.value} value={c.value}>
                         {c.label}
                       </SelectItem>
                     ))}
@@ -220,13 +199,28 @@ export default function PostProduct() {
                 <Input
                   type="number"
                   value={price}
-                  onChange={(e) =>
-                    setPrice(e.target.value)
-                  }
+                  onChange={(e) => setPrice(e.target.value)}
                   placeholder="0.00"
                   required
                 />
               </div>
+            </div>
+
+            {/* School Selector */}
+            <div className="space-y-2">
+              <Label>School</Label>
+              <Select value={school} onValueChange={setSchool}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select your school" />
+                </SelectTrigger>
+                <SelectContent>
+                  {schools.map((s) => (
+                    <SelectItem key={s.value} value={s.value}>
+                      {s.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             {/* Negotiable */}
@@ -237,18 +231,13 @@ export default function PostProduct() {
                   Buyers can make offers
                 </p>
               </div>
-              <Switch
-                checked={isNegotiable}
-                onCheckedChange={setIsNegotiable}
-              />
+              <Switch checked={isNegotiable} onCheckedChange={setIsNegotiable} />
             </div>
 
             {/* Images */}
             <div className="space-y-2">
               <Label>Product Images</Label>
-
               <label className="flex flex-col items-center justify-center border border-dashed rounded-xl p-6 cursor-pointer hover:border-primary/40 transition">
-
                 {imagePreviews.length > 0 ? (
                   <div className="grid grid-cols-3 gap-2 w-full">
                     {imagePreviews.map((src, i) => (
@@ -278,7 +267,6 @@ export default function PostProduct() {
                     </p>
                   </>
                 )}
-
                 <input
                   type="file"
                   accept="image/*"

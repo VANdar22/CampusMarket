@@ -101,6 +101,8 @@ export type Database = {
           title: string
           updated_at: string
           user_id: string
+          views: number
+          school: string | null
         }
         Insert: {
           category?: Database["public"]["Enums"]["product_category"]
@@ -114,6 +116,8 @@ export type Database = {
           title: string
           updated_at?: string
           user_id: string
+          views?: number
+          school?: string | null
         }
         Update: {
           category?: Database["public"]["Enums"]["product_category"]
@@ -127,6 +131,8 @@ export type Database = {
           title?: string
           updated_at?: string
           user_id?: string
+          views?: number
+          school?: string | null
         }
         Relationships: []
       }
@@ -140,6 +146,7 @@ export type Database = {
           id: string
           updated_at: string
           user_id: string
+          school: string | null
         }
         Insert: {
           avatar_url?: string | null
@@ -149,6 +156,7 @@ export type Database = {
           id?: string
           updated_at?: string
           user_id: string
+          school?: string | null
         }
         Update: {
           avatar_url?: string | null
@@ -158,6 +166,7 @@ export type Database = {
           id?: string
           updated_at?: string
           user_id?: string
+          school?: string | null
         }
         Relationships: []
       }

@@ -1,8 +1,20 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 const Footer = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    try {
+      await supabase.auth.signOut(); // correct way
+      navigate("/auth"); // redirect to login page
+    } catch (error) {
+      console.error("Error signing out:", error.message);
+    }
+  };
+
   return (
     <footer className="w-full bg-background text-foreground pt-8 pb-2 px-6 border-t border-border mt-48">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-8">
@@ -29,7 +41,14 @@ const Footer = () => {
               {(!user) ? (
                 <li><Link to="/auth" className="text-sm font-light text-muted-foreground hover:text-foreground transition-colors">Sign In</Link></li>
               ) : (
-                <li><Link to="/auth" className="text-sm font-light text-destructive hover:text-destructive/70 transition-colors">Sign Out</Link></li>
+                <li>
+                  <button 
+                    onClick={handleSignOut} 
+                    className="text-sm font-light text-destructive hover:text-destructive/70 transition-colors"
+                  >
+                    Sign Out
+                  </button>
+                </li>
               )}
             </ul>
           </div>
@@ -42,6 +61,6 @@ const Footer = () => {
       </div>
     </footer>
   );
-}
+};
 
 export default Footer;
