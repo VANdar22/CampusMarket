@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { User, LogOut, Package, Sun, Moon } from "lucide-react";
+import { User, LogOut, Package, Sun, Moon, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -132,6 +132,9 @@ export function Navbar() {
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => navigate("/my-listings")}>
                   <Package className="mr-2 h-4 w-4" /> My Listings
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate("/wishlist")}>
+                  <Heart className="mr-2 h-4 w-4" /> Saved Items
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={signOut}>
