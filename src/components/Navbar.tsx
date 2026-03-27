@@ -13,6 +13,8 @@ import { Switch } from "@/components/ui/switch";
 import { useState, useEffect } from "react";
 import { createAvatar } from "@dicebear/core";
 import * as Adventurer from "@dicebear/adventurer";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import icon from "../images/icon.png";
 
 export function Navbar() {
@@ -41,10 +43,26 @@ export function Navbar() {
     else root.classList.remove("dark");
   }, [isDark]);
 
+  // Fetch conversations
+  const { data: conversations } = useQuery({
+    queryKey: ["conversations", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("conversations")
+        .select("*, products(id, title, image_url, price, user_id)")
+        .or(`buyer_id.eq.${user!.id},seller_id.eq.${user!.id}`)
+        .order("updated_at", { ascending: false });
+
+      if (error) throw error;
+      return data;
+    },
+  });
+
   const navItems = [
-    { name: "Browse", href: "#/" },
-    { name: "Sell", href: "#/post-product" },
-    { name: "Messages", href: "#/messages" },
+    { name: "Browse", href: "/"},
+    { name: "Sell", href: "/post-product" },
+    { name: "Messages", href: "/messages", badge: conversations?.length },
   ];
 
   return (
@@ -66,21 +84,26 @@ export function Navbar() {
         {/* Desktop nav */}
         <div className="hidden lg:flex space-x-8">
           {navItems.map((item) => (
-            <a
+            <Link
               key={item.name}
-              href={item.href}
-              className="text-sm font-light text-primary hover:text-foreground transition"
+              to={item.href}
+              className="relative text-sm font-light text-primary hover:text-foreground transition"
             >
               {item.name}
-            </a>
+              {item.badge && item.badge > 0 && (
+                <span className="absolute -top-2 -right-6 inline-flex items-center justify-center px-2 py-1 text-xs text-white font-bold leading-none h-5 w-5 bg-primary/70 rounded-full">
+                  {item.badge}
+                </span>
+              )}
+            </Link>
           ))}
         </div>
 
         {/* Logo */}
         <div className="absolute left-1/2 -translate-x-1/2">
-          <a href="#/" className="text-lg font-light tracking-wide text-foreground">
+          <Link to="/" className="text-lg font-light tracking-wide text-foreground">
             <img src={icon} alt="Icon" className="h-16 w-16 object-contain" />
-          </a>
+          </Link>
         </div>
 
         {/* Mobile avatar */}
@@ -101,7 +124,7 @@ export function Navbar() {
           <div className="relative flex items-center">
             <Switch
               checked={isDark}
-              onCheckedChange={(checked) => setIsDark(checked)}
+              onCheckedChange={setIsDark}
               className="h-6 w-11"
             />
             <div className="pointer-events-none absolute left-1 flex items-center h-6">
@@ -156,14 +179,19 @@ export function Navbar() {
         <div className="lg:hidden border-t bg-background">
           <div className="px-6 py-6 space-y-6">
             {navItems.map((item) => (
-              <a
+              <Link
                 key={item.name}
-                href={item.href}
+                to={item.href}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block text-lg font-light text-foreground"
+                className="block text-lg font-light relative"
               >
                 {item.name}
-              </a>
+                {item.badge && item.badge > 0 && (
+                  <span className="absolute right-3  inline-flex items-center justify-center px-2 py-2 text-[10px] font-bold leading-none h-5 w-5 text-white bg-primary/70 rounded-full">
+                    {item.badge}
+                  </span>
+                )}
+              </Link>
             ))}
 
             {user ? (
@@ -202,7 +230,7 @@ export function Navbar() {
               <div className="relative flex items-center">
                 <Switch
                   checked={isDark}
-                  onCheckedChange={(checked) => setIsDark(checked)}
+                  onCheckedChange={setIsDark}
                   className="h-6 w-11"
                 />
                 <div className="pointer-events-none absolute left-1 flex items-center h-6">

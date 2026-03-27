@@ -233,10 +233,16 @@ export type Database = {
     }
     Views: {
       [_ in never]: never
+
     }
-    Functions: {
-      increment_views: { Args: { product_id: string }; Returns: undefined }
+   Functions: {
+  increment_views: {
+    Args: {
+      product_id: string
     }
+    Returns: void
+  }
+}
     Enums: {
       product_category:
         | "books"
