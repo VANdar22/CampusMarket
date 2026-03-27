@@ -60,9 +60,11 @@ export function Navbar() {
   });
 
   const navItems = [
-    { name: "Browse", href: "/"},
+    { name: "Browse", href: "/" },
     { name: "Sell", href: "/post-product" },
-    { name: "Messages", href: "/messages", badge: conversations?.length },
+    ...(conversations && conversations.length > 0
+      ? [{ name: "Messages", href: "/messages", badge: conversations.length }]
+      : [{ name: "Messages", href: "/messages" }]),
   ];
 
   return (
@@ -196,6 +198,13 @@ export function Navbar() {
 
             {user ? (
               <>
+              <Link
+                to="/wishlist"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block text-lg font-light"
+              >
+                Saved Items
+              </Link>
                 <Link
                   to="/my-listings"
                   onClick={() => setIsMobileMenuOpen(false)}
