@@ -230,7 +230,7 @@ export default function Chat() {
       <div className="p-4 border-t bg-card space-y-2">
         {isOffer && (
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium">£</span>
+            <span className="text-sm font-medium">GHS</span>
             <Input
               type="number"
               min="0"
