@@ -168,7 +168,7 @@ export default function Index() {
     {isRefreshing ? (
      <LoaderCircle className="h-5 w-5 animate-spin" />
     ) : (
-      <LoaderCircle className="h-5 w-5" />
+      <RefreshCw className="h-5 w-5" />
     )}
   </Button>
 </div>
