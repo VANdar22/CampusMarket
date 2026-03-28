@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import Footer from "@/components/ui/footer";
 import HeroCarousel from "@/components/Header";
 import { Button } from "@/components/ui/button";
+import { RefreshCw , Loader, LoaderCircle} from "lucide-react";
 
 type Product = Database["public"]["Tables"]["products"]["Row"];
 
@@ -158,11 +159,19 @@ export default function Index() {
         </div>
 
         {/* REFRESH BUTTON */}
-        <div className="flex justify-center">
-          <Button variant="outline" onClick={handleRefresh}>
-            {isRefreshing ? "Refreshing..." : "Refresh"}
-          </Button>
-        </div>
+<div className="flex justify-center">
+  <Button
+    variant="outline"
+    onClick={handleRefresh}
+    className="flex items-center justify-center"
+  >
+    {isRefreshing ? (
+     <LoaderCircle className="h-5 w-5 animate-spin" />
+    ) : (
+      <LoaderCircle className="h-5 w-5" />
+    )}
+  </Button>
+</div>
 
         {/* SEARCH RESULTS */}
         {isSearchingActive && (
