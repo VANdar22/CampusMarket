@@ -19,15 +19,22 @@ export default function Index() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
   const [mobilePage, setMobilePage] = useState(1);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const ITEMS_PER_PAGE_MOBILE = 8;
+  const isSearchingActive = !!searchParams.get("q");
+
+  const productSelect =
+    "id,title,price,category,image_urls,image_url,is_negotiable,views";
 
   /* =========================
-     POPULAR PRODUCTS (MAX 12)
+     POPULAR PRODUCTS
   ========================== */
-  const productSelect = "id,title,price,category,image_urls,image_url,is_negotiable,views";
-
-  const { data: popularProducts, isLoading: isLoadingPopular } = useQuery({
+  const {
+    data: popularProducts,
+    isLoading: isLoadingPopular,
+    refetch: refetchPopular,
+  } = useQuery({
     queryKey: ["popularProducts"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -40,14 +47,16 @@ export default function Index() {
       if (error) throw error;
       return data as Product[];
     },
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
   });
 
   /* =========================
-     NEW ITEMS (MAX 20)
+     NEW PRODUCTS
   ========================== */
-  const { data: newProducts, isLoading: isLoadingNew } = useQuery({
+  const {
+    data: newProducts,
+    isLoading: isLoadingNew,
+    refetch: refetchNew,
+  } = useQuery({
     queryKey: ["newProducts"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -60,14 +69,16 @@ export default function Index() {
       if (error) throw error;
       return data as Product[];
     },
-    staleTime: 2 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
   });
 
   /* =========================
-     SEARCH (SEPARATE)
+     SEARCH
   ========================== */
-  const { data: searchedProducts, isLoading: isSearching } = useQuery({
+  const {
+    data: searchedProducts,
+    isLoading: isSearching,
+    refetch: refetchSearch,
+  } = useQuery({
     queryKey: ["searchedProducts", searchParams.get("q")],
     queryFn: async () => {
       const query = searchParams.get("q");
@@ -85,13 +96,31 @@ export default function Index() {
     enabled: !!searchParams.get("q"),
   });
 
+  /* =========================
+     SEARCH HANDLER
+  ========================== */
   const handleSearch = (value: string) => {
     setSearchQuery(value);
     if (value.trim()) setSearchParams({ q: value });
     else setSearchParams({});
   };
 
-  /* Mobile pagination logic */
+  /* =========================
+     REFRESH HANDLER
+  ========================== */
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+
+    await Promise.all([
+      refetchPopular(),
+      refetchNew(),
+      isSearchingActive ? refetchSearch() : Promise.resolve(),
+    ]);
+
+    setIsRefreshing(false);
+  };
+
+  /* Mobile pagination */
   const displayedNewProducts = newProducts?.slice(
     0,
     mobilePage * ITEMS_PER_PAGE_MOBILE
@@ -102,8 +131,9 @@ export default function Index() {
 
   return (
     <div className="min-h-screen flex flex-col">
-
       <div className="flex-1 mx-auto max-w-7xl px-4 py-6 space-y-6">
+
+        {/* HEADER */}
         <div className="mb-4 text-center py-16">
           <h1 className="text-3xl md:text-5xl font-light text-foreground mb-3">
             CampusMarket
@@ -112,7 +142,6 @@ export default function Index() {
             Buy and sell with students on your campus
           </p>
         </div>
-        {/* HERO */}
 
         {/* CATEGORY */}
         <CategoryFilter selected="" />
@@ -128,12 +157,19 @@ export default function Index() {
           />
         </div>
 
-        {/* =========================
-            SEARCH RESULTS ONLY
-        ========================== */}
-        {searchParams.get("q") && (
+        {/* REFRESH BUTTON */}
+        <div className="flex justify-center">
+          <Button variant="outline" onClick={handleRefresh}>
+            {isRefreshing ? "Refreshing..." : "Refresh"}
+          </Button>
+        </div>
+
+        {/* SEARCH RESULTS */}
+        {isSearchingActive && (
           <section>
-            <h2 className="text-2xl font-light mb-6">Search Results for '{searchQuery}'</h2>
+            <h2 className="text-2xl font-light mb-6">
+              Search Results for '{searchQuery}'
+            </h2>
 
             {isSearching ? (
               <SkeletonGrid />
@@ -143,20 +179,18 @@ export default function Index() {
               <EmptyState
                 emoji="🔍"
                 title="No products found"
-                description={`We couldn't find anything matching "${searchQuery}". Try a different search term.`}
+                description={`No results for "${searchQuery}".`}
               />
             )}
           </section>
         )}
-        
-        {/* =========================
-            POPULAR (MAX 12)
-        ========================== */}
-        {!searchParams.get("q") && (
+
+        {/* POPULAR */}
+        {!isSearchingActive && (
           <section>
             <h2 className="text-2xl font-light mb-6">Popular products</h2>
 
-            {isLoadingPopular ? (
+            {isLoadingPopular || isRefreshing ? (
               <SkeletonGrid />
             ) : (
               <ProductGrid products={popularProducts || []} />
@@ -164,27 +198,29 @@ export default function Index() {
           </section>
         )}
 
-      
-        <HeroCarousel />
-          {/* =========================
-            NEW ITEMS (NOT FILTERED)
-        ========================== */}
-        {!searchParams.get("q") && (
-          <section>
-            <h2 className="text-2xl font-light mb-6">Recent listed items</h2>
+        {/* HERO (HIDDEN DURING SEARCH + REFRESH) */}
+        {!isSearchingActive && !isRefreshing && <HeroCarousel />}
 
-            {isLoadingNew ? (
+        {/* NEW ITEMS */}
+        {!isSearchingActive && (
+          <section>
+            <h2 className="text-2xl font-light mb-6">
+              Recent listed items
+            </h2>
+
+            {isLoadingNew || isRefreshing ? (
               <SkeletonGrid />
             ) : (
               <>
                 <ProductGrid products={displayedNewProducts || []} />
 
-                {/* Mobile Load More */}
                 {canLoadMore && (
                   <div className="text-center mt-6 md:hidden">
                     <Button
                       variant="outline"
-                      onClick={() => setMobilePage((prev) => prev + 1)}
+                      onClick={() =>
+                        setMobilePage((prev) => prev + 1)
+                      }
                     >
                       Load More
                     </Button>
@@ -195,17 +231,13 @@ export default function Index() {
           </section>
         )}
 
-<Footer />
-
+        <Footer />
       </div>
-
     </div>
   );
 }
 
-/* =========================
-   REUSABLE GRID COMPONENT
-========================== */
+/* GRID */
 function ProductGrid({ products }: { products: Product[] }) {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -216,9 +248,7 @@ function ProductGrid({ products }: { products: Product[] }) {
   );
 }
 
-/* =========================
-   SKELETON GRID
-========================== */
+/* SKELETON */
 function SkeletonGrid() {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">

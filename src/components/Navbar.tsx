@@ -14,13 +14,14 @@ import { useState, useEffect } from "react";
 import { createAvatar } from "@dicebear/core";
 import * as Adventurer from "@dicebear/adventurer";
 import { useQuery } from "@tanstack/react-query";
+import { useTheme } from "@/contexts/ThemeProvider";
 import { supabase } from "@/integrations/supabase/client";
 import icon from "../images/icon.png";
 
 export function Navbar() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
-  const [isDark, setIsDark] = useState(false);
+  const { theme, setTheme } = useTheme(); // ✅ FIXED
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [avatarUri, setAvatarUri] = useState<string>("");
 
@@ -35,13 +36,6 @@ export function Navbar() {
       setAvatarUri(svg);
     }
   }, [user]);
-
-  // Dark mode
-  useEffect(() => {
-    const root = document.documentElement;
-    if (isDark) root.classList.add("dark");
-    else root.classList.remove("dark");
-  }, [isDark]);
 
   // Fetch conversations
   const { data: conversations } = useQuery({
@@ -125,12 +119,12 @@ export function Navbar() {
           {/* Dark mode switch */}
           <div className="relative flex items-center">
             <Switch
-              checked={isDark}
-              onCheckedChange={setIsDark}
+              checked={theme === "dark"}
+              onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")} // ✅ FIXED
               className="h-6 w-11"
             />
             <div className="pointer-events-none absolute left-1 flex items-center h-6">
-              {isDark ? (
+              {theme === "dark" ? (
                 <Moon className="h-3.5 w-3.5 text-white translate-x-5 transition-transform duration-200" />
               ) : (
                 <Sun className="h-3.5 w-3.5 text-yellow-500 translate-x-0 transition-transform duration-200" />
@@ -189,7 +183,7 @@ export function Navbar() {
               >
                 {item.name}
                 {item.badge && item.badge > 0 && (
-                  <span className="absolute right-3  inline-flex items-center justify-center px-2 py-2 text-[10px] font-bold leading-none h-5 w-5 text-white bg-primary/70 rounded-full">
+                  <span className="absolute right-3 inline-flex items-center justify-center px-2 py-2 text-[10px] font-bold leading-none h-5 w-5 text-white bg-primary/70 rounded-full">
                     {item.badge}
                   </span>
                 )}
@@ -198,18 +192,10 @@ export function Navbar() {
 
             {user ? (
               <>
-              <Link
-                to="/wishlist"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block text-lg font-light"
-              >
-                Saved Items
-              </Link>
-                <Link
-                  to="/my-listings"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="block text-lg font-light"
-                >
+                <Link to="/wishlist" onClick={() => setIsMobileMenuOpen(false)} className="block text-lg font-light">
+                  Saved Items
+                </Link>
+                <Link to="/my-listings" onClick={() => setIsMobileMenuOpen(false)} className="block text-lg font-light">
                   My Listings
                 </Link>
 
@@ -224,32 +210,18 @@ export function Navbar() {
                 </button>
               </>
             ) : (
-              <Link
-                to="/auth"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block text-lg font-light"
-              >
+              <Link to="/auth" onClick={() => setIsMobileMenuOpen(false)} className="block text-lg font-light">
                 Sign In
               </Link>
             )}
 
-            {/* Mobile Dark Mode Toggle */}
+            {/* Mobile Dark Mode */}
             <div className="flex items-center justify-between">
               <span className="text-lg font-light text-muted-foreground">Mode</span>
-              <div className="relative flex items-center">
-                <Switch
-                  checked={isDark}
-                  onCheckedChange={setIsDark}
-                  className="h-6 w-11"
-                />
-                <div className="pointer-events-none absolute left-1 flex items-center h-6">
-                  {isDark ? (
-                    <Moon className="h-3.5 w-3.5 text-white translate-x-5 transition-transform duration-200" />
-                  ) : (
-                    <Sun className="h-3.5 w-3.5 text-yellow-500 translate-x-0 transition-transform duration-200" />
-                  )}
-                </div>
-              </div>
+              <Switch
+                checked={theme === "dark"}
+                onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")} // ✅ FIXED
+              />
             </div>
           </div>
         </div>
