@@ -4,7 +4,6 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { ThemeProvider } from "@/contexts/ThemeProvider"; // 👈 ADD THIS
 
 import Index from "./pages/Index";
 import About from "./pages/About";
@@ -27,7 +26,6 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <ThemeProvider> {/* 👈 WRAP HERE */}
       <TooltipProvider>
         <Toaster />
         <Sonner />
@@ -42,7 +40,6 @@ const App = () => (
             </AppLayout>
           </HashRouter>
       </TooltipProvider>
-    </ThemeProvider>
   </QueryClientProvider>
 );
 
