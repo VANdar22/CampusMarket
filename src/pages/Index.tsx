@@ -1,273 +1,349 @@
-import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { ProductCard } from "@/components/ProductCard";
-import { CategoryFilter } from "@/components/CategoryFilter";
-import { Skeleton } from "@/components/ui/skeleton";
-import { EmptyState } from "@/components/EmptyState";
-import type { Database } from "@/integrations/supabase/types";
-import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import Footer from "@/components/ui/footer";
-import HeroCarousel from "@/components/Header";
-import { Button } from "@/components/ui/button";
-import { RefreshCw , Loader, LoaderCircle} from "lucide-react";
+import { PropertyCard } from "@/components/PropertyCard";
+import Words from "@/components/ui/words";
+import ScrollHighlightText from "@/components/ScrollHighlightText";
+import RealEstateShowcase from "@/components/RealEstateShowcase";
+import HeroParralax from "@/components/HeroParralax";
+import NewsletterParallax from "@/components/NewsletterParallax";
 
-type Product = Database["public"]["Tables"]["products"]["Row"];
+const properties = [
+  {
+    id: "1",
+    title: "Modern Luxury Villa",
+    price: 250000,
+    location: "East Legon, Accra",
+    bedrooms: 4,
+    image:
+    "https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1778520935/cosmos_1959895835_inipve.jpg  ",
+  },
+  {
+    id: "2",
+    title: "Executive Apartment",
+    price: 1800,
+    location: "Airport Residential, Accra",
+    bedrooms: 3,
+    image:
+    "https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1778520935/cosmos_1959895835_inipve.jpg  ",
+  },
+  {
+    id: "3",
+    title: "Beachfront House",
+    price: 450000,
+    location: "Labadi, Accra",
+    bedrooms: 5,
+    image:
+    "https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1778520935/cosmos_1959895835_inipve.jpg  ",
+  },
+  {
+    id: "4",
+    title: "Minimal Family Home",
+    price: 320000,
+    location: "Cantonments, Accra",
+    bedrooms: 4,
+    image:
+    "https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1778520935/cosmos_1959895835_inipve.jpg  ",
+  },
+];
 
 export default function Index() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
-  const [mobilePage, setMobilePage] = useState(1);
-  const [isRefreshing, setIsRefreshing] = useState(false);
-
-  const ITEMS_PER_PAGE_MOBILE = 8;
-  const isSearchingActive = !!searchParams.get("q");
-
-  const productSelect =
-    "id,title,price,category,image_urls,image_url,is_negotiable,views";
-
-  /* =========================
-     POPULAR PRODUCTS
-  ========================== */
-  const {
-    data: popularProducts,
-    isLoading: isLoadingPopular,
-    refetch: refetchPopular,
-  } = useQuery({
-    queryKey: ["popularProducts"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("products")
-        .select(productSelect)
-        .eq("is_sold", false)
-        .order("views", { ascending: false })
-        .limit(12);
-
-      if (error) throw error;
-      return data as Product[];
-    },
-  });
-
-  /* =========================
-     NEW PRODUCTS
-  ========================== */
-  const {
-    data: newProducts,
-    isLoading: isLoadingNew,
-    refetch: refetchNew,
-  } = useQuery({
-    queryKey: ["newProducts"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("products")
-        .select(productSelect)
-        .eq("is_sold", false)
-        .order("created_at", { ascending: false })
-        .limit(20);
-
-      if (error) throw error;
-      return data as Product[];
-    },
-  });
-
-  /* =========================
-     SEARCH
-  ========================== */
-  const {
-    data: searchedProducts,
-    isLoading: isSearching,
-    refetch: refetchSearch,
-  } = useQuery({
-    queryKey: ["searchedProducts", searchParams.get("q")],
-    queryFn: async () => {
-      const query = searchParams.get("q");
-      if (!query) return [];
-
-      const { data, error } = await supabase
-        .from("products")
-        .select(productSelect)
-        .eq("is_sold", false)
-        .or(`title.ilike.%${query}%,description.ilike.%${query}%`);
-
-      if (error) throw error;
-      return data as Product[];
-    },
-    enabled: !!searchParams.get("q"),
-  });
-
-  /* =========================
-     SEARCH HANDLER
-  ========================== */
-  const handleSearch = (value: string) => {
-    setSearchQuery(value);
-    if (value.trim()) setSearchParams({ q: value });
-    else setSearchParams({});
-  };
-
-  /* =========================
-     REFRESH HANDLER
-  ========================== */
-  const handleRefresh = async () => {
-    setIsRefreshing(true);
-
-    await Promise.all([
-      refetchPopular(),
-      refetchNew(),
-      isSearchingActive ? refetchSearch() : Promise.resolve(),
-    ]);
-
-    setIsRefreshing(false);
-  };
-
-  /* Mobile pagination */
-  const displayedNewProducts = newProducts?.slice(
-    0,
-    mobilePage * ITEMS_PER_PAGE_MOBILE
-  );
-
-  const canLoadMore =
-    newProducts && displayedNewProducts.length < newProducts.length;
-
   return (
-    <div className="min-h-screen flex flex-col">
-      <div className="flex-1 mx-auto max-w-7xl px-4 py-6 space-y-6">
+    <div className="min-h-screen bg-background flex flex-col overflow-x-hidden">
+      <main className="flex-1">
+        {/* HERO */}
+        <section className="relative min-h-screen overflow-hidden pt-0 md:pt-20">
+          <div className="max-w-7xl mx-auto px-5 md:px-8">
+            <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+              {/* TEXT */}
+              <div className="order-1 flex flex-col justify-center">
+                <div className="max-w-2xl mx-auto lg:mx-0">
+                  <ScrollHighlightText
+                    variant="background"
+                    className="
+                      text-xl
+                      sm:text-xl
+                      md:text-2xl
+                      lg:text-3xl
+                      font-[quicksand]
+                      leading-tight
+                      font-medium
+                      tracking-tight
+                      text-gray-600
+                      text-center
+                      lg:text-left
+                      mt-5
+                      md:mt-10
+                      ml-5
+                      md:ml-0
+                    "
+                  >
+                    BUY & RENT PROPERTIES IN GHANA
+                  </ScrollHighlightText>
 
-        {/* HEADER */}
-        <div className="mb-4 text-center py-16">
-          <h1 className="text-3xl md:text-5xl font-light text-foreground mb-3">
-            CampusMarket
-          </h1>
-          <p className="text-muted-foreground font-light text-lg mb-8">
-            Buy and sell with students on your campus
-          </p>
-        </div>
+                  <p
+                    className="
+                      mt-6
+                      text-md
+                      sm:text-lg
+                      md:text-xl
+                      leading-relaxed
+                      font-light
+                      text-secondary
+                      font-[quicksand]
+                      text-center
+                      lg:text-left
+                    "
+                  >
+                    We help you move forward with clarity, confidence, and the
+                    right agent by your side.
+                  </p>
 
-        {/* CATEGORY */}
-        <CategoryFilter selected="" />
-
-        {/* SEARCH */}
-        <div className="max-w-xl mx-auto relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-          <Input
-            placeholder="Search for textbooks, electronics..."
-            value={searchQuery}
-            onChange={(e) => handleSearch(e.target.value)}
-            className="pl-12 h-12 rounded-none border-border font-light"
-          />
-        </div>
-
-        {/* REFRESH BUTTON */}
-<div className="flex justify-center">
-  <Button
-    variant="outline"
-    onClick={handleRefresh}
-    className="flex items-center justify-center"
-  >
-    {isRefreshing ? (
-     <LoaderCircle className="h-5 w-5 animate-spin" />
-    ) : (
-      <RefreshCw className="h-5 w-5" />
-    )}
-  </Button>
-</div>
-
-        {/* SEARCH RESULTS */}
-        {isSearchingActive && (
-          <section>
-            <h2 className="text-2xl font-light mb-6">
-              Search Results for '{searchQuery}'
-            </h2>
-
-            {isSearching ? (
-              <SkeletonGrid />
-            ) : searchedProducts && searchedProducts.length > 0 ? (
-              <ProductGrid products={searchedProducts} />
-            ) : (
-              <EmptyState
-                emoji="🔍"
-                title="No products found"
-                description={`No results for "${searchQuery}".`}
-              />
-            )}
-          </section>
-        )}
-
-        {/* POPULAR */}
-        {!isSearchingActive && (
-          <section>
-            <h2 className="text-2xl font-light mb-6">Popular products</h2>
-
-            {isLoadingPopular || isRefreshing ? (
-              <SkeletonGrid />
-            ) : (
-              <ProductGrid products={popularProducts || []} />
-            )}
-          </section>
-        )}
-
-        {/* HERO (HIDDEN DURING SEARCH + REFRESH) */}
-        {!isSearchingActive && !isRefreshing && <HeroCarousel />}
-
-        {/* NEW ITEMS */}
-        {!isSearchingActive && (
-          <section>
-            <h2 className="text-2xl font-light mb-6">
-              Recent listed items
-            </h2>
-
-            {isLoadingNew || isRefreshing ? (
-              <SkeletonGrid />
-            ) : (
-              <>
-                <ProductGrid products={displayedNewProducts || []} />
-
-                {canLoadMore && (
-                  <div className="text-center mt-6 md:hidden">
-                    <Button
-                      variant="outline"
-                      onClick={() =>
-                        setMobilePage((prev) => prev + 1)
-                      }
+                  {/* HERO BUTTON */}
+                  <div className="flex justify-center lg:justify-start">
+                    <button
+                      className="
+                        w-[75%]
+                        sm:w-auto
+                        flex
+                        items-center
+                        justify-center
+                        h-10
+                        sm:h-12
+                        md:h-14
+                        px-5
+                        sm:px-8
+                        mt-6
+                        bg-[#145a98]
+                        hover:bg-[#f5f5f5]
+                        text-accent
+                        hover:text-black
+                        font-semibold
+                        font-[Aboreto]
+                        tracking-[0.1em]
+                        transition-all
+                        duration-300
+                        hover:scale-105
+                        text-xs
+                        sm:text-sm
+                      "
                     >
-                      Load More
-                    </Button>
+                      SIGN UP
+                    </button>
                   </div>
-                )}
-              </>
-            )}
-          </section>
-        )}
+                </div>
 
-        <Footer />
-      </div>
-    </div>
-  );
-}
+                {/* MOBILE STATS */}
+                <div
+                  className="
+                    grid
+                    grid-cols-3
+                    gap-4
+                    mt-10
+                    text-center
+                    lg:hidden
+                  "
+                >
+                  <div>
+                    <h2 className="text-md font-[Aboreto] text-accent">
+                      350+
+                    </h2>
 
-/* GRID */
-function ProductGrid({ products }: { products: Product[] }) {
-  return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-      {products.map((product) => (
-        <ProductCard key={product.id} product={product} />
-      ))}
-    </div>
-  );
-}
+                    <p className="text-xs sm:text-sm font-[quicksand] text-secondary mt-1">
+                      Satisfied Clients
+                    </p>
+                  </div>
 
-/* SKELETON */
-function SkeletonGrid() {
-  return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-      {Array.from({ length: 8 }).map((_, i) => (
-        <div key={i} className="space-y-3">
-          <Skeleton className="aspect-square rounded-xl" />
-          <Skeleton className="h-4 w-3/4" />
-          <Skeleton className="h-4 w-1/2" />
-        </div>
-      ))}
+                  <div>
+                    <h2 className="text-md font-[Aboreto] text-accent">
+                      120+
+                    </h2>
+
+                    <p className="text-xs sm:text-sm font-[quicksand] text-secondary mt-1">
+                      Properties Sold
+                    </p>
+                  </div>
+
+                  <div>
+                    <h2 className="text-md font-[Aboreto] text-accent">
+                      {new Date().getFullYear() - 2018}+
+                    </h2>
+
+                    <p className="text-xs sm:text-sm font-[quicksand] text-secondary mt-1">
+                      Years
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* DESKTOP STATS */}
+              <div className="hidden lg:flex flex-col gap-8 pt-6">
+                <h2 className="text-lg font-light flex items-center gap-4 text-secondary">
+                  <span className="text-3xl letterspace-2 font-[Aboreto] text-accent">
+                    350+
+                  </span>
+
+                  <span className="text-lg">Satisfied Clients</span>
+                </h2>
+
+                <h2 className="text-lg font-light flex items-center gap-4 text-secondary">
+                  <span className="text-3xl letterspace-2 font-[Aboreto] text-accent">
+                    120+
+                  </span>
+
+                  <span className="text-lg">Properties Sold</span>
+                </h2>
+
+                <h2 className="text-lg font-light flex items-center gap-4 text-secondary">
+                  <span className="text-3xl letterspace-2 font-[Aboreto] text-accent">
+                    {new Date().getFullYear() - 2018}+
+                  </span>
+
+                  <span className="text-lg md:ml-7">
+                    Years Experience
+                  </span>
+                </h2>
+              </div>
+            </div>
+
+            {/* HERO IMAGE */}
+            <div className="mt-20 md:mt-20">
+              <HeroParralax />
+            </div>
+          </div>
+        </section>
+
+        {/* WORDS SECTION */}
+        <section className="py-10 md:py-20 px-5 md:px-8">
+          <div className="mx-auto bg-white border border-gray-200 py-10 md:py-10">
+            <Words />
+          </div>
+        </section>
+
+        {/* PROPERTY SECTION */}
+        <section className="py-10 px-5 md:px-10 md:py-10">
+          <div className="max-w-7xl mt-20 md:mt-20 mx-auto">
+            {/* HEADING */}
+            <div>
+              <ScrollHighlightText
+                variant="background"
+                className="
+                  text-xl
+                  md:text-3xl
+                  font-[quicksand]
+                  leading-tight
+                  font-medium
+                  tracking-tight
+                  text-gray-600
+                  text-center
+                  lg:text-left
+                  ml-9
+                  md:ml-0
+                "
+              >
+                Discover Premium Properties
+              </ScrollHighlightText>
+
+              <p
+                className="
+                  mt-5
+                  text-md
+                  mb-5
+                  md:text-xl
+                  font-light
+                  text-secondary
+                  text-center
+                  lg:text-left
+                  font-[quicksand]
+                  max-w-3xl
+                "
+              >
+                We help you find the best properties tailored to your needs.
+              </p>
+
+             {/* DESKTOP PROPERTY BUTTON */}
+<div className="hidden lg:flex justify-start">
+  <button
+    className="
+      w-auto
+      flex
+      items-center
+      justify-center
+      h-14
+      px-8
+      mt-6
+      bg-[#145a98]
+      hover:bg-[#f5f5f5]
+      text-accent
+      hover:text-black
+      font-semibold
+      font-[Aboreto]
+      tracking-[0.1em]
+      transition-all
+      duration-300
+      hover:scale-105
+      text-sm
+    "
+  >
+    View All Properties
+  </button>
+</div>
+            </div>
+
+            {/* PROPERTY GRID */}
+            <div
+              className="
+                grid
+                grid-cols-1
+                md:grid-cols-2
+                gap-6
+                md:gap-6
+                items-start
+                mt-10
+              "
+            >
+              {properties.map((property) => (
+                <PropertyCard
+                  key={property.id}
+                  property={property}
+                />
+                
+              ))}
+            </div>
+            {/* MOBILE PROPERTY BUTTON */}
+<div className="flex justify-center mt-8 lg:hidden">
+  <button
+    className="
+      w-[75%]
+      flex
+      items-center
+      justify-center
+      h-10
+      px-5
+      bg-[#145a98]
+      hover:bg-[#f5f5f5]
+      text-accent
+      hover:text-black
+      font-semibold
+      font-[Aboreto]
+      tracking-[0.1em]
+      transition-all
+      duration-300
+      text-xs
+    "
+  >
+    View All Properties
+  </button>
+</div>
+          </div>
+        </section>
+
+        {/* SHOWCASE */}
+        <section className="w-full mt-10 text-white overflow-hidden">
+          <RealEstateShowcase />
+        </section>
+      </main>
+
+      <NewsletterParallax />
+      <Footer />
     </div>
   );
 }

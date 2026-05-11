@@ -1,66 +1,147 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
-
-const Footer = () => {
-  const { user } = useAuth();
-  const navigate = useNavigate();
-
-  const handleSignOut = async () => {
-    try {
-      await supabase.auth.signOut(); // correct way
-      navigate("/auth"); // redirect to login page
-    } catch (error) {
-      console.error("Error signing out:", error.message);
-    }
-  };
-
+import logo from "../../images/sms.png";
+import facebook from "../../images/facebook.png";
+import instagram from "../../images/instagram.png";
+import twitter from "../../images/x.png";
+export default function LuxuryFooter() {
   return (
-    <footer className="w-full bg-background text-foreground pt-8 pb-2 px-6 border-t border-border mt-48">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-8">
-        <div>
-          <h3 className="text-lg font-light tracking-wider mb-4">CampusMarket</h3>
-          <p className="text-sm font-light text-muted-foreground leading-relaxed max-w-md">
-            The student marketplace for buying and selling on campus
+    <footer className="bg-[#f5f5f3] text-[#33415c] relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 pt-14 md:pt-24 pb-10 md:pb-16">
+        {/* TOP STATS */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-16">
+          {/* ITEM 1 */}
+          <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 md:gap-6">
+            <h2 className="text-3xl md:text-4xl font-[Aboreto] text-accent font-light leading-none">
+              350+
+            </h2>
+
+            <h3 className="text-sm md:text-lg font-[quicksand] font-light text-secondary tracking-wide leading-snug max-w-xs">
+              Happy Clients Successfully Guided Through Luxury Real Estate
+            </h3>
+          </div>
+
+          {/* ITEM 2 */}
+          <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 md:gap-6">
+            <h2 className="text-3xl md:text-4xl font-[Aboreto] text-accent font-light leading-none">
+              8+
+            </h2>
+
+            <h3 className="text-sm md:text-lg font-[quicksand] font-light text-secondary tracking-wide leading-snug max-w-xs">
+              Years of Experience in Premium Residential Property Sales
+            </h3>
+          </div>
+
+          {/* ITEM 3 */}
+          <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 md:gap-6">
+            <h2 className="text-3xl md:text-4xl font-[Aboreto] text-accent font-light leading-none">
+              120+
+            </h2>
+
+            <h3 className="text-sm md:text-lg font-[quicksand] font-light text-secondary tracking-wide leading-snug max-w-xs">
+              Luxury Properties Successfully Marketed and Sold Across Barbados
+            </h3>
+          </div>
+        </div>
+
+        {/* DIVIDER */}
+        <div className="w-full h-px bg-[#d7d7d7] mt-14 md:mt-20" />
+
+        {/* MIDDLE */}
+        <div className="flex flex-col lg:flex-row justify-between items-center lg:items-center gap-10 py-12 md:py-14">
+          {/* LOGOS */}
+          <div className="flex flex-wrap justify-center lg:justify-start items-center gap-6 md:gap-12">
+            <img
+              src={logo}
+              alt="logo"
+              className="h-10 md:h-12 object-contain opacity-80"
+            />
+
+            <img
+              src={logo}
+              alt="logo"
+              className="h-10 md:h-12 object-contain opacity-80"
+            />
+
+            <img
+              src={logo}
+              alt="logo"
+              className="h-10 md:h-12 object-contain opacity-80"
+            />
+          </div>
+
+          {/* CONTACT */}
+          <div className="flex flex-col md:flex-row items-center font-[quicksand] font-light gap-4 md:gap-10 text-sm md:text-lg text-black text-center">
+            <a
+              href="mailto:vandar@smshomefinder.com"
+              className="u hover:opacity-70 transition break-all"
+            >
+              vandar@smshomefinder.com
+            </a>
+
+            <a href="tel:+233537435123" className="hover:opacity-70 font-[quicksand] transition">
+              +233 53 743 5123
+            </a>
+          </div>
+        </div>
+
+        {/* BOTTOM */}
+        <div className="flex flex-col xl:flex-row justify-between items-center gap-8 md:gap-10 pb-6 md:pb-12">
+          {/* COPYRIGHT */}
+          <p className="text-sm md:text-md text-secondary font-[quicksand] font-light text-center xl:text-left">
+            ©2024 SMS HomeFinder. All rights reserved.
           </p>
-        </div>
-        <div className="grid grid-cols-2 gap-8">
-          <div>
-            <h4 className="text-sm font-normal mb-4">Marketplace</h4>
-            <ul className="space-y-2">
-              <li><Link to="/" className="text-sm font-light text-muted-foreground hover:text-foreground transition-colors">Browse All</Link></li>
-              <li><Link to="/post-product" className="text-sm font-light text-muted-foreground hover:text-foreground transition-colors">Sell an Item</Link></li>
-              <li><Link to="/my-listings" className="text-sm font-light text-muted-foreground hover:text-foreground transition-colors">My Listings</Link></li>
-            </ul>
+
+          {/* NAV */}
+          <div className="flex flex-wrap justify-center gap-5 text-sm md:text-md text-accent font-semibold font-[Aboreto] text-center">
+            <a href="#" className="hover:text-secondary transition">
+              Home
+            </a>
+
+            <a href="#" className="hover:text-secondary transition">
+              Search Properties
+            </a>
+
+            <a href="#" className="hover:text-secondary transition">
+              About Us
+            </a>
+
+            <a href="#" className="hover:text-secondary transition">
+              Contact
+            </a>
+
+            <a href="#" className="hover:text-secondary transition">
+              Policy
+            </a>
+
+            <a href="#" className="hover:text-secondary transition">
+              Cookies
+            </a>
           </div>
-          <div>
-            <h4 className="text-sm font-normal mb-4">Account</h4>
-            <ul className="space-y-2">
-              <li><Link to="/profile" className="text-sm font-light text-muted-foreground hover:text-foreground transition-colors">Profile</Link></li>
-              <li><Link to="/messages" className="text-sm font-light text-muted-foreground hover:text-foreground transition-colors">Messages</Link></li>
-              {(!user) ? (
-                <li><Link to="/auth" className="text-sm font-light text-muted-foreground hover:text-foreground transition-colors">Sign In</Link></li>
-              ) : (
-                <li>
-                  <button 
-                    onClick={handleSignOut} 
-                    className="text-sm font-light text-destructive hover:text-destructive/70 transition-colors"
-                  >
-                    Sign Out
-                  </button>
-                </li>
-              )}
-            </ul>
+          {/* SOCIALS */}
+          <div className="flex items-center gap-3 md:gap-4">
+            {[facebook, instagram, twitter].map((icon, index) => (
+              <div
+                key={index}
+                className="
+        w-10 h-10 md:w-12 md:h-12
+        rounded-full
+        border border-accent
+        flex items-center justify-center
+        hover:bg-gray-200
+        transition-all duration-300
+        cursor-pointer
+        p-2
+      "
+              >
+                <img
+                  src={icon}
+                  alt="social"
+                  className="w-4 h-4 md:w-5 md:h-5 object-contain"
+                />
+              </div>
+            ))}
           </div>
         </div>
-      </div>
-      <div className="border-t border-border -mx-6 px-6 pt-2">
-        <p className="text-sm font-light text-muted-foreground">
-          © 2024 CampusMarket. All rights reserved.
-        </p>
       </div>
     </footer>
   );
-};
-
-export default Footer;
+}

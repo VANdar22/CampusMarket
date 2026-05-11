@@ -2,38 +2,24 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HashRouter, Routes, Route, useLocation } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
+
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeProvider"; // 👈 ADD THIS
 
 import Index from "./pages/Index";
-import Auth from "./pages/Auth";
+import About from "./pages/About";
 import ProductDetails from "./pages/ProductDetails";
-import Post from "./pages/PostProduct";
-import Messages from "./pages/Messages";
-import Chat from "./pages/Chat";
-import Profile from "./pages/Profile";
-import MyListings from "./pages/MyListings";
-import EditProduct from "./pages/EditProduct";
-import Wishlist from "./pages/Wishlist";
-import NotFound from "./pages/NotFound";
-import Category from "./pages/Category";
-
 import NavBar from "./components/Navbar";
-import GuestNavBar from "./components/GuestNavbar";
+import ListingsPage from "./pages/propertypage";
 
 const queryClient = new QueryClient();
 
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
-  const { user } = useAuth();
-  const location = useLocation();
 
-  const hideGuestNav = location.pathname === "/auth";
 
   return (
     <>
-      {user && <NavBar />}
-      {!user && !hideGuestNav && <GuestNavBar />}
+    <NavBar />
       {children}
     </>
   );
@@ -45,26 +31,16 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <AuthProvider>
           <HashRouter>
             <AppLayout>
               <Routes>
                 <Route path="/" element={<Index />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/product/:id" element={<ProductDetails />} />
-                <Route path="/post-product" element={<Post />} />
-                <Route path="/messages" element={<Messages />} />
-                <Route path="/chat/:id" element={<Chat />} />
-                <Route path="/category/:category" element={<Category />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/my-listings" element={<MyListings />} />
-                <Route path="/edit-product/:id" element={<EditProduct />} />
-                <Route path="/wishlist" element={<Wishlist />} />
-                <Route path="*" element={<NotFound />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/property" element={<ListingsPage />} />
+                <Route path="/property/:id" element={<ProductDetails />} />
               </Routes>
             </AppLayout>
           </HashRouter>
-        </AuthProvider>
       </TooltipProvider>
     </ThemeProvider>
   </QueryClientProvider>

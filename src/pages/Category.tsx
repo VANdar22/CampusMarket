@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { ProductCard } from "@/components/ProductCard";
+import { ProductCard } from "@/components/PropertyCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Search, ChevronDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
