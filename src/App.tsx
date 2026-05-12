@@ -8,8 +8,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import ProductDetails from "./pages/ProductDetails";
+import Blog from "./pages/Blog";
 import NavBar from "./components/Navbar";
 import ListingsPage from "./pages/propertypage";
+import Contact from "./pages/Contact";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +38,8 @@ const App = () => (
                 <Route path="/about" element={<About />} />
                 <Route path="/property" element={<ListingsPage />} />
                 <Route path="/property/:id" element={<ProductDetails />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/contact" element={<Contact />} />
               </Routes>
             </AppLayout>
           </HashRouter>

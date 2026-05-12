@@ -2,6 +2,8 @@ import logo from "../../images/sms.png";
 import facebook from "../../images/facebook.png";
 import instagram from "../../images/instagram.png";
 import twitter from "../../images/x.png";
+import whatsapp from "../../images/Whatsapp.png";
+
 export default function LuxuryFooter() {
   return (
     <footer className="bg-[#f5f5f3] text-[#33415c] relative overflow-hidden">
@@ -55,17 +57,8 @@ export default function LuxuryFooter() {
               className="h-10 md:h-12 object-contain opacity-80"
             />
 
-            <img
-              src={logo}
-              alt="logo"
-              className="h-10 md:h-12 object-contain opacity-80"
-            />
+           
 
-            <img
-              src={logo}
-              alt="logo"
-              className="h-10 md:h-12 object-contain opacity-80"
-            />
           </div>
 
           {/* CONTACT */}
@@ -118,7 +111,7 @@ export default function LuxuryFooter() {
           </div>
           {/* SOCIALS */}
           <div className="flex items-center gap-3 md:gap-4">
-            {[facebook, instagram, twitter].map((icon, index) => (
+            {[facebook, instagram, whatsapp].map((icon, index) => (
               <div
                 key={index}
                 className="
@@ -127,6 +120,7 @@ export default function LuxuryFooter() {
         border border-accent
         flex items-center justify-center
         hover:bg-gray-200
+
         transition-all duration-300
         cursor-pointer
         p-2

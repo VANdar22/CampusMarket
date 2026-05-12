@@ -59,24 +59,23 @@ export default function Index() {
                   <ScrollHighlightText
                     variant="background"
                     className="
-                      text-xl
-                      sm:text-xl
+                     mt-6
+                      text-lg
+                      sm:text-lg
                       md:text-2xl
                       lg:text-3xl
+                      leading-relaxed
+                      font-semibold
+                      text-gray-900
                       font-[quicksand]
-                      leading-tight
-                      font-medium
-                      tracking-tight
-                      text-gray-600
+                      justify-center
                       text-center
-                      lg:text-left
-                      mt-5
-                      md:mt-10
                       ml-5
                       md:ml-0
+                      lg:text-left
                     "
                   >
-                    BUY & RENT PROPERTIES IN GHANA
+                    BUY, RENT & MANAGE PROPERTIES
                   </ScrollHighlightText>
 
                   <p
@@ -86,7 +85,7 @@ export default function Index() {
                       sm:text-lg
                       md:text-xl
                       leading-relaxed
-                      font-light
+                      font-medium
                       text-secondary
                       font-[quicksand]
                       text-center
@@ -112,13 +111,15 @@ export default function Index() {
                         px-5
                         sm:px-8
                         mt-6
+                        border-accent
+                        border
                         bg-[#145a98]
                         hover:bg-[#f5f5f5]
                         text-accent
-                        hover:text-black
-                        font-semibold
+                        hover:text-[#145a98]
+                        font-bold
                         font-[Aboreto]
-                        tracking-[0.1em]
+                        tracking-widest
                         transition-all
                         duration-300
                         hover:scale-105
@@ -126,7 +127,7 @@ export default function Index() {
                         sm:text-sm
                       "
                     >
-                      SIGN UP
+                      Contact Us
                     </button>
                   </div>
                 </div>
@@ -143,31 +144,31 @@ export default function Index() {
                   "
                 >
                   <div>
-                    <h2 className="text-md font-[Aboreto] text-accent">
+                    <h2 className="text-lg font-[Aboreto] text-accent">
                       350+
                     </h2>
 
-                    <p className="text-xs sm:text-sm font-[quicksand] text-secondary mt-1">
+                    <p className="text-sm sm:text-sm font-[quicksand] text-secondary mt-1">
                       Satisfied Clients
                     </p>
                   </div>
 
                   <div>
-                    <h2 className="text-md font-[Aboreto] text-accent">
+                    <h2 className="text-lg font-[Aboreto] text-accent">
                       120+
                     </h2>
 
-                    <p className="text-xs sm:text-sm font-[quicksand] text-secondary mt-1">
+                    <p className="text-sm sm:text-sm font-[quicksand] text-secondary mt-1">
                       Properties Sold
                     </p>
                   </div>
 
                   <div>
-                    <h2 className="text-md font-[Aboreto] text-accent">
+                    <h2 className="text-lg font-[Aboreto] text-accent">
                       {new Date().getFullYear() - 2018}+
                     </h2>
 
-                    <p className="text-xs sm:text-sm font-[quicksand] text-secondary mt-1">
+                    <p className="text-sm sm:text-sm font-[quicksand] text-secondary mt-1">
                       Years
                     </p>
                   </div>
@@ -181,15 +182,15 @@ export default function Index() {
                     350+
                   </span>
 
-                  <span className="text-lg">Satisfied Clients</span>
+                  <span className="text-xl">Satisfied Clients</span>
                 </h2>
 
-                <h2 className="text-lg font-light flex items-center gap-4 text-secondary">
-                  <span className="text-3xl letterspace-2 font-[Aboreto] text-accent">
+                <h2 className="text-xl font-light flex items-center gap-4 text-secondary">
+                  <span className="text-3xl letterspace-4 font-[Aboreto] text-accent">
                     120+
                   </span>
 
-                  <span className="text-lg">Properties Sold</span>
+                  <span className="text-xl">Properties Sold</span>
                 </h2>
 
                 <h2 className="text-lg font-light flex items-center gap-4 text-secondary">
@@ -197,7 +198,7 @@ export default function Index() {
                     {new Date().getFullYear() - 2018}+
                   </span>
 
-                  <span className="text-lg md:ml-7">
+                  <span className="text-xl md:ml-7">
                     Years Experience
                   </span>
                 </h2>
@@ -248,7 +249,7 @@ export default function Index() {
                   text-md
                   mb-5
                   md:text-xl
-                  font-light
+                  font-medium
                   text-secondary
                   text-center
                   lg:text-left
@@ -273,10 +274,13 @@ export default function Index() {
       bg-[#145a98]
       hover:bg-[#f5f5f5]
       text-accent
-      hover:text-black
+      hover:text-[#145a98]
+      border-accent
+      border
+
       font-semibold
       font-[Aboreto]
-      tracking-[0.1em]
+      tracking-widest
       transition-all
       duration-300
       hover:scale-105

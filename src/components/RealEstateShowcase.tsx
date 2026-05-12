@@ -8,24 +8,21 @@ const sections = [
     description:
       "We’ve done this over 10,000 times, and we know what wins.",
     image:
-      "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=1400&auto=format&fit=crop",
-  },
+    "https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1778626508/cosmos_2060372693_gen5y7.jpg"  },
   {
     id: "02",
     title: "Sell",
     description:
       "Sell fast, sell high. Your listing gets pro staging, strategic pricing, constant open houses, and agents who never stop working until the right buyer signs.",
     image:
-      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=1400&auto=format&fit=crop",
-  },
+    "https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1778626508/cosmos_2060372693_1_u0kunz.jpg"  },
   {
     id: "03",
     title: "Rent",
     description:
       "Access hidden rentals before they hit the market through agents who know every landlord in town.",
     image:
-      "https://images.unsplash.com/photo-1494526585095-c41746248156?q=80&w=1400&auto=format&fit=crop",
-  },
+    "https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1778626508/cosmos_2060372693_2_ygcziz.jpg"  },
 ];
 
 export default function HoverRevealSections() {

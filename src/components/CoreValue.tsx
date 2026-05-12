@@ -13,35 +13,32 @@ export default function CoreValues() {
       description:
         "We believe that trust is the foundation of every successful real estate transaction.",
       image:
-        "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1200&auto=format&fit=crop",
-    },
+      "https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1778626508/cosmos_371842233_y4zwzs.jpg"    },
     {
       number: "02",
       title: "Professionalism",
       description:
         "We approach every aspect of our work with discipline, expertise, and attention to detail.",
       image:
-        "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1200&auto=format&fit=crop",
-    },
+      "https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1778626508/cosmos_1882128341_xtbabp.jpg"    },
     {
       number: "03",
       title: "Client Commitment",
       description:
         "We take the time to understand every client's unique needs and provide personalized solutions that deliver real value.",
       image:
-        "https://images.unsplash.com/photo-1573497491765-cf4147f4d87d?q=80&w=1200&auto=format&fit=crop",
-    },
+      "https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1778626508/cosmos_1333685916_xlp00b.jpg"    },
   ];
 
   return (
     <section className="relative bg-[#ececec] ">
       {/* Heading */}
       <div className="mb-14 px-5 text-center">
-        <ScrollHighlightText className="text-lg font-[quicksand] font-bold text-gray-900 md:text-3xl">
+        <ScrollHighlightText className="text-lg font-[quicksand] font-semibold text-gray-900 md:text-3xl">
           Our Core Values
         </ScrollHighlightText>
 
-        <p className="mx-auto mt-4 max-w-2xl font-light font-[quicksand] text-gray-600 md:text-xl">
+        <p className="mx-auto mt-4 max-w-2xl font-medium font-[quicksand] text-gray-600 md:text-xl">
           The principles that guide our commitment to trusted and professional
           real estate services.
         </p>
@@ -86,7 +83,7 @@ export default function CoreValues() {
               {/* Large Number */}
               <div className="absolute left-5 top-5 z-20">
                 <span
-                  className={`text-5xl font-semibold text-accent/40 transition-all font-[aboreto] duration-500 md:text-7xl ${
+                  className={`text-2xl md:text-5xl font-semibold text-accent/40 transition-all font-[aboreto] duration-500 ${
                     isActive ? "text-accent/80" : ""
                   }`}
                 >

@@ -8,20 +8,17 @@ export default function MeetTheTeam() {
         name: "Suleiman Misbau Safian",
         position: "Chief Executive Director",
         image:
-          "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=800&auto=format&fit=crop",
-      },
+        "https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1778622057/smsstaff2_ecfjhm.jpg"      },
       {
         name: "Abdul Wahab Suleiman Ahmed",
         position: "General Manager",
         image:
-          "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=800&auto=format&fit=crop",
-      },
+        "https://res.cloudinary.com/dvsdcgu9q/image/upload/v1778622057/smsstaff1_tcpivx.jpg"      },
       {
         name: "Nuratu Jibril",
         position: "Secretary General",
         image:
-          "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=800&auto=format&fit=crop",
-      },
+        "https://res.cloudinary.com/dvsdcgu9q/image/upload/v1778622058/smsstaff3_z4hcrc.jpg"      },
     ];
   
     return (
@@ -29,7 +26,7 @@ export default function MeetTheTeam() {
         
         {/* Heading */}
         <div className="mb-14 text-center">
-          <ScrollHighlightText className="text-xl font-[quicksand] font-bold text-gray-900 md:text-3xl">
+          <ScrollHighlightText className="text-xl font-[quicksand] font-semibold text-gray-900 md:text-3xl">
             Meet The Team
           </ScrollHighlightText>
   
@@ -54,7 +51,7 @@ export default function MeetTheTeam() {
   
               {/* Text Below Image */}
               <div className="p-5 text-left">
-                <h2 className="text-lg font-light font-[quicksand] text-gray-900">
+                <h2 className="text-lg font-medium font-[quicksand] text-gray-900">
                   {member.name}
                 </h2>
   

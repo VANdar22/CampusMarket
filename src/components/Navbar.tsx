@@ -1,6 +1,11 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import icon from "../images/sms.png";
+import facebook from "../images/facebook.png";
+import instagram from "../images/instagram.png";
+import twitter from "../images/x.png";
+import whatsapp from "../images/Whatsapp.png";
+
 
 export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -22,29 +27,27 @@ export function Navbar() {
       } else {
         setShowNavbar(true);
       }
-
       lastScrollY = window.scrollY;
     };
 
     window.addEventListener("scroll", handleScroll);
-
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
     <header
-    className={`
-      sticky md:fixed top-0 left-0 w-full z-50
-      backdrop-blur-md
-      bg-[rgba(245,245,243,0.75)]
-      border-b border-black/5
-      md:transition-transform duration-300
-      ${showNavbar ? "md:translate-y-0" : "md:-translate-y-full"}
-    `}
-  >
+      className={`
+        sticky md:fixed top-0 left-0 w-full z-50
+        backdrop-blur-md
+        bg-[rgba(245,245,243,0.75)]
+        border-b border-black/5
+        md:transition-transform duration-300
+        ${showNavbar ? "md:translate-y-0" : "md:-translate-y-full"}
+      `}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-        
-        {/* Logo */}
+
+        {/* LOGO */}
         <Link to="/" className="flex items-center shrink-0">
           <img
             src={icon}
@@ -53,8 +56,9 @@ export function Navbar() {
           />
         </Link>
 
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center ml-auto gap-10">
+        {/* DESKTOP NAV */}
+        <nav className="hidden md:flex items-center ml-auto gap-8">
+
           {navItems.map((item) => (
             <Link
               key={item.name}
@@ -73,9 +77,36 @@ export function Navbar() {
               {item.name}
             </Link>
           ))}
+
+          {/* SOCIAL ICONS */}
+          <div className="flex items-center gap-3 ml-6">
+
+            <a
+              href="#"
+              className="w-6 h-6 flex items-center justify-center rounded-full hover:bg-gradient-to-r from-blue-500 to-white transition"
+            >
+              <img src={facebook} alt="Facebook" />
+            </a>
+
+            <a
+              href="#"
+              className="w-6 h-6 flex items-center justify-center rounded-full hover:bg-gradient-to-r from-red-500 to-purple-500 transition"
+            >
+              <img src={instagram} alt="Instagram" />
+            </a>
+
+            <a
+              href="#"
+              className="w-6 h-6 flex items-center justify-center rounded-full hover:bg-gradient-to-r from-green-700 to-white transition"
+            >
+              <img src={whatsapp} alt="Whatsapp" />
+            </a>
+
+          </div>
+
         </nav>
 
-        {/* Mobile Button */}
+        {/* MOBILE BUTTON */}
         <button
           className="
             md:hidden
@@ -90,16 +121,12 @@ export function Navbar() {
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           <div className="relative w-5 h-5">
-            
+
             <span
               className={`
                 absolute left-0 w-5 h-0.5 bg-current
                 transition-all duration-300
-                ${
-                  isMobileMenuOpen
-                    ? "rotate-45 top-2"
-                    : "top-1"
-                }
+                ${isMobileMenuOpen ? "rotate-45 top-2" : "top-1"}
               `}
             />
 
@@ -107,11 +134,7 @@ export function Navbar() {
               className={`
                 absolute left-0 top-2 w-5 h-0.5 bg-current
                 transition-all duration-300
-                ${
-                  isMobileMenuOpen
-                    ? "opacity-0"
-                    : "opacity-100"
-                }
+                ${isMobileMenuOpen ? "opacity-0" : "opacity-100"}
               `}
             />
 
@@ -119,32 +142,24 @@ export function Navbar() {
               className={`
                 absolute left-0 w-5 h-0.5 bg-current
                 transition-all duration-300
-                ${
-                  isMobileMenuOpen
-                    ? "-rotate-45 top-2"
-                    : "top-3"
-                }
+                ${isMobileMenuOpen ? "-rotate-45 top-2" : "top-3"}
               `}
             />
           </div>
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* MOBILE MENU */}
       <div
         className={`
           md:hidden
           overflow-hidden
           transition-all duration-500
-          ${
-            isMobileMenuOpen
-              ? "max-h-96 opacity-100"
-              : "max-h-0 opacity-0"
-          }
+          ${isMobileMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}
         `}
       >
         <div className="px-6 pb-6 pt-2 bg-[rgba(245,245,243,0.95)] backdrop-blur-xl flex flex-col gap-5">
-          
+
           {navItems.map((item) => (
             <Link
               key={item.name}
@@ -162,8 +177,18 @@ export function Navbar() {
               {item.name}
             </Link>
           ))}
+
+          {/* MOBILE SOCIAL ICONS */}
+          <div className="flex items-center gap-5 pt-6 border-t border-black/10">
+
+            <a href="#"><img src={facebook} alt="Facebook" className="w-5 h-5 bg-gradient-to-r from-blue-500 to-white" /></a>
+            <a href="#"><img src={instagram} alt="Instagram" className="w-5 h-5 bg-gradient-to-r from-pink-500 to-white" /></a>
+            <a href="#"><img src={whatsapp} alt="Whatsapp" className="w-5 h-5 bg-gradient-to-r from-green-700 to-white" /></a>
+          </div>
+
         </div>
       </div>
+
     </header>
   );
 }
