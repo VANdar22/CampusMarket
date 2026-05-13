@@ -1,158 +1,34 @@
 import { useNavigate, useParams } from "react-router-dom";
+import { getProperties } from "@/services/properties";
 
-import { useState } from "react";
-
-import { Button } from "@/components/ui/button";
-
-import { Badge } from "@/components/ui/badge";
-
-import { Card } from "@/components/ui/card";
+import { useEffect, useState } from "react";
 
 import {
   ArrowLeft,
-  MapPin,
-  MessageCircle,
-  Phone,
-  ShieldCheck,
   Plus,
   Minus,
 } from "lucide-react";
 
 import bed from "../images/bedroom.png";
-
 import bath from "../images/bathroom.png";
 import check from "../images/check.png";
 import house from "../images/house.png";
-import PropertyCard from "../components/PropertyCard";
+import location from "../images/location.png";
 
 import ScrollHighlightText from "../components/ScrollHighlightText";
-import location from "../images/location.png";
-// -----------------------------------
-// MOCK PROPERTY DATA
-// -----------------------------------
-
-const properties = [
-  {
-    id: "1",
-
-    title: "4-Bedroom Uncompleted Storey Building For Sale – Bortianor",
-
-    listing_type: "For Sale",
-
-    status: "Pending",
-
-    location: "Ayololo Junction – Near St. Karol Nursing School, Bortianor",
-
-    price: 400000,
-
-    currency: "GHS",
-
-    negotiable: false,
-
-    property_type: "Storey Building",
-
-    bedrooms: 4,
-
-    bathrooms: 5,
-
-    description: `
-A great investment opportunity in a fast-growing and peaceful neighborhood.4-Bedroom Storey Building (up to window level)Strong structural foundation completed Spacious layout with great potential Ideal for a family home or rental investment
-
-    `,
-
-    site_plan: true,
-
-    indenture: true,
-
-    building_permit: true,
-
-    agent_name: "Noble Realty Ghana",
-
-    phone_number: "233537435123",
-
-    image_urls: [
-      "https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=1200",
-
-      "https://images.unsplash.com/photo-1570129477492-45c003edd2be?q=80&w=1200",
-
-      "https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=1200",
-
-      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1200",
-    ],
-  },
-];
-
-// -----------------------------------
-// RELATED PROPERTIES
-// -----------------------------------
-
-const relatedProperties = [
-  {
-    id: "2",
-
-    title: "Luxury 5 Bedroom Townhouse – Cantonments",
-
-    location: "Cantonments, Accra",
-
-    price: 1100000,
-
-    currency: "$",
-
-    image_url:
-      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=1200",
-
-    listing_type: "For Sale",
-  },
-
-  {
-    id: "3",
-
-    title: "Land For Sale – Noble Realty Estates",
-
-    location: "Prampram, Accra",
-
-    price: 300000,
-
-    currency: "GHS",
-
-    image_url:
-      "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1200",
-
-    listing_type: "For Sale",
-  },
-
-  {
-    id: "4",
-
-    title: "Newly Built 4 Bedroom House For Rent",
-
-    location: "School Junction, Accra",
-
-    price: 1300,
-
-    currency: "$",
-
-    image_url:
-      "https://images.unsplash.com/photo-1605146769289-440113cc3d00?q=80&w=1200",
-
-    listing_type: "For Rent",
-  },
-];
 
 // -----------------------------------
 // IMAGE GALLERY
 // -----------------------------------
-
 interface PropertyImageGalleryProps {
-  images: string[];
+  gallery_images: any[];
 }
-
-const PropertyImageGallery = ({ images }: PropertyImageGalleryProps) => {
+const PropertyImageGallery = ({ gallery_images }: PropertyImageGalleryProps) => {
   return (
     <div className="w-full">
       {/* DESKTOP */}
       <div className="hidden lg:flex flex-col gap-4">
-        {images.map((img, index) => (
+        {gallery_images.map((img, index) => (
           <div key={index} className="overflow-hidden">
             <img
               src={img}
@@ -166,15 +42,10 @@ const PropertyImageGallery = ({ images }: PropertyImageGalleryProps) => {
       {/* MOBILE */}
       <div className="lg:hidden overflow-x-auto scrollbar-hide">
         <div className="flex gap-4 snap-x snap-mandatory">
-          {images.map((img, index) => (
+          {gallery_images.map((img, index) => (
             <div
               key={index}
-              className="
-                min-w-full
-                snap-center
-                overflow-hidden
-                h-[300px]
-              "
+              className="min-w-full snap-center overflow-hidden h-[300px]"
             >
               <img
                 src={img}
@@ -208,7 +79,15 @@ const RelatedPropertyCard = ({ item }: any) => {
       "
     >
       <img
-        src={item.image_url}
+        src={
+          item.featured_image ||
+          (Array.isArray(item.gallery_images) &&
+          item.gallery_images.length > 0
+            ? typeof item.gallery_images[0] === "string"
+              ? item.gallery_images[0]
+              : item.gallery_images[0]?.url
+            : "")
+        }
         alt={item.title}
         className="h-60 w-full object-cover"
       />
@@ -240,17 +119,62 @@ export default function PropertyDetails() {
 
   const { id } = useParams();
 
-  const property = properties.find((item) => item.id === id);
+  const [property, setProperty] = useState<any>(null);
+
+  const [properties, setProperties] = useState<any[]>([]);
+
+  const [loading, setLoading] = useState(true);
 
   const [openAccordion, setOpenAccordion] = useState(1);
 
-  if (!property) {
-    return <div className="p-10">Property not found</div>;
+  useEffect(() => {
+    const fetchProperty = async () => {
+      try {
+        const data = await getProperties();
+
+        setProperties(data || []);
+
+        const foundProperty = data.find(
+          (item: any) => String(item.id) === String(id)
+        );
+
+        setProperty(foundProperty);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProperty();
+  }, [id]);
+
+  if (loading) {
+    return <div className="p-10 text-3xl font-[aboreto] text-accent">Loading...</div>;
   }
+  if (!property) {
+    return (
+      <div className="p-10 font-[aboreto] text-accent">Property not found</div>
+    );
+  }
+
+  console.log(property.gallery_images);
 
   const toggleAccordion = (id: number) => {
     setOpenAccordion(openAccordion === id ? 0 : id);
   };
+
+  // -----------------------------------
+  // RELATED PROPERTIES
+  // -----------------------------------
+
+  const relatedProperties = properties
+    .filter(
+      (item: any) =>
+        item.id !== property.id &&
+        item.listing_type === property.listing_type
+    )
+    .slice(0, 3);
 
   return (
     <div className="min-h-screen bg-background">
@@ -269,7 +193,13 @@ export default function PropertyDetails() {
         {/* MAIN GRID */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
           {/* LEFT */}
-          <PropertyImageGallery images={property.image_urls} />
+          <PropertyImageGallery
+            gallery_images={
+              Array.isArray(property.gallery_images)
+                ? property.gallery_images
+                : []
+            }
+          />
 
           {/* RIGHT */}
           <div className="space-y-6 lg:sticky lg:top-6 h-fit">
@@ -290,7 +220,8 @@ export default function PropertyDetails() {
             {/* PRICE */}
             <div>
               <h2 className="text-2xl md:text-3xl font-[Aboreto] text-accent">
-                {property.currency} {Number(property.price).toLocaleString()}
+                {property.currency}{" "}
+                {Number(property.price).toLocaleString()}
               </h2>
             </div>
 
@@ -454,7 +385,13 @@ export default function PropertyDetails() {
                 )}
               </div>
 
-              {/* 3 */}
+             
+                  
+
+
+
+                  
+              {/* 4 */}
               <div className="border rounded-[28px] overflow-hidden bg-[#fafafa]">
                 <button
                   onClick={() => toggleAccordion(3)}
@@ -483,7 +420,7 @@ export default function PropertyDetails() {
                         text-secondary
                       "
                     >
-                      Documents Available
+                      Contact Agent
                     </h2>
                   </div>
 
@@ -496,77 +433,9 @@ export default function PropertyDetails() {
 
                 {openAccordion === 3 && (
                   <div className="px-6 md:px-10 pb-10 space-y-5">
-                    {property.site_plan && (
-                      <div className="flex items-center gap-3 text-lg text-muted-foreground font-[quicksand]">
-                        <img src={check} className="h-5 w-5" />
-                        Site Plan
-                      </div>
-                    )}
-                    <hr />
-
-                    {property.indenture && (
-                      <div className="flex items-center gap-3 text-lg text-muted-foreground font-[quicksand]">
-                        <img src={check} className="h-5 w-5" />
-                        Indenture
-                      </div>
-                    )}
-                    <hr />
-                    {property.building_permit && (
-                      <div className="flex items-center gap-3 text-lg text-muted-foreground font-[quicksand]">
-                        <img src={check} className="h-5 w-5 " />
-                        Building Permit
-                      </div>
-                    )}
-                    <hr />
-                  </div>
-                )}
-              </div>
-
-              {/* 4 */}
-              <div className="border rounded-[28px] overflow-hidden bg-[#fafafa]">
-                <button
-                  onClick={() => toggleAccordion(4)}
-                  className="
-                    w-full
-                    flex
-                    items-center
-                    justify-between
-                    px-6
-                    md:px-10
-                    py-8
-                    text-left
-                  "
-                >
-                  <div className="flex items-center gap-5">
-                    <span className="text-accent text-lg md:text-xl font-light">
-                      4.
-                    </span>
-
-                    <h2
-                      className="
-                        text-lg
-                        md:text-xl
-                        font-[quicksand]
-                        font-light
-                        text-secondary
-                      "
-                    >
-                      Contact Agent
-                    </h2>
-                  </div>
-
-                  {openAccordion === 4 ? (
-                    <Minus className="h-7 w-7 text-accent" />
-                  ) : (
-                    <Plus className="h-7 w-7 text-accent" />
-                  )}
-                </button>
-
-                {openAccordion === 4 && (
-                  <div className="px-6 md:px-10 pb-10 space-y-5">
                     <div>
                       <p className="text-lg text-muted-foreground font-[quicksand]">
-                        Contact : {property.phone_number}
+                        Contact : {property.contact_phone}
                       </p>
                     </div>
                   </div>
@@ -577,17 +446,19 @@ export default function PropertyDetails() {
         </div>
 
         {/* RELATED PROPERTIES */}
-        <div>
-          <ScrollHighlightText className="text-2xl mb-4 font-medium font-[quicksand] uppercase">
-            properties you may also like{" "}
-          </ScrollHighlightText>
+        {relatedProperties.length > 0 && (
+          <div>
+            <ScrollHighlightText className="text-2xl mb-4 font-medium font-[quicksand] uppercase">
+              properties you may also like
+            </ScrollHighlightText>
 
-          <div className="grid grid-cols-1  mt-4 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {relatedProperties.map((item) => (
-              <RelatedPropertyCard key={item.id} item={item} />
-            ))}
+            <div className="grid grid-cols-1 mt-4 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {relatedProperties.map((item) => (
+                <RelatedPropertyCard key={item.id} item={item} />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </main>
     </div>
   );

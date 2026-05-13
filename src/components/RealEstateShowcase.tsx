@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { ArrowRight } from "lucide-react";
 
+import NewsletterParallax from "./NewsletterParallax";
+
 const sections = [
   {
     id: "01",
@@ -22,7 +24,7 @@ const sections = [
     description:
       "Access hidden rentals before they hit the market through agents who know every landlord in town.",
     image:
-    "https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1778626508/cosmos_2060372693_2_ygcziz.jpg"  },
+      "https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1778626508/cosmos_2060372693_2_ygcziz.jpg"  },
 ];
 
 export default function HoverRevealSections() {
@@ -151,6 +153,8 @@ export default function HoverRevealSections() {
           </div>
         );
       })}
+                <NewsletterParallax />
+
     </section>
   );
 }

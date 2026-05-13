@@ -4,6 +4,8 @@ import Footer from "@/components/ui/footer";
 import { PropertyCard } from "@/components/PropertyCard";
 import ScrollHighlightText from "@/components/ScrollHighlightText";
 
+import { getProperties } from "@/services/properties";
+
 import {
   PropertyFilter,
   EMPTY_FILTERS,
@@ -11,61 +13,6 @@ import {
   filtersFromSearchParams,
   type PropertyFilterValues,
 } from "@/components/PropertyFilter";
-
-/* -------------------------------------------------------------------------- */
-/*                                PROPERTY DATA                               */
-/* -------------------------------------------------------------------------- */
-
-const properties = [
-  {
-    id: "1",
-    name: "Modern Luxury Villa",
-    type: "Villa",
-    price: "250000",
-    location: "East Legon, Accra",
-    bedrooms: 4,
-    bathrooms: 5,
-    description: "Luxury villa with swimming pool and modern interior.",
-    image:
-    "https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1778520935/cosmos_1959895835_inipve.jpg  ",
-  },
-  {
-    id: "2",
-    name: "Executive Apartment",
-    type: "Penthouse",
-    price: "180000",
-    location: "Airport Residential, Accra",
-    bedrooms: 3,
-    bathrooms: 3,
-    description: "Executive apartment close to the airport.",
-    image:
-    "https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1778520935/cosmos_1959895835_inipve.jpg  ",
-  },
-  {
-    id: "3",
-    name: "Beachfront House",
-    type: "Beach House",
-    price: "450000",
-    location: "Labadi, Accra",
-    bedrooms: 5,
-    bathrooms: 6,
-    description: "Beautiful beachfront property with ocean views.",
-    image:
-    "https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1778520935/cosmos_1959895835_inipve.jpg  ",
-  },
-  {
-    id: "4",
-    name: "Minimal Family Home",
-    type: "Estate",
-    price: "320000",
-    location: "Cantonments, Accra",
-    bedrooms: 4,
-    bathrooms: 4,
-    description: "Modern family home in a secure neighborhood.",
-    image:
-    "https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1778520935/cosmos_1959895835_inipve.jpg  ",
-  },
-];
 
 /* -------------------------------------------------------------------------- */
 /*                               LISTINGS PAGE                                */
@@ -78,40 +25,75 @@ export default function ListingsPage({
   title: string;
   subtitle: string;
 }) {
-  /* ------------------------------- ALL DATA -------------------------------- */
+  /* ------------------------------- STATE -------------------------------- */
 
-  const allProperties = useMemo(() => properties, []);
+  const [allProperties, setAllProperties] = useState<any[]>([]);
 
-  /* ------------------------------- FILTERS --------------------------------- */
+  const [loading, setLoading] = useState(true);
 
   const [filters, setFilters] =
     useState<PropertyFilterValues>(EMPTY_FILTERS);
 
-  /* ------------------------ LOAD FILTERS FROM URL -------------------------- */
+  /* -------------------------- FETCH PROPERTIES --------------------------- */
+
+  useEffect(() => {
+    async function loadProperties() {
+      try {
+        const data = await getProperties();
+
+        setAllProperties(data || []);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadProperties();
+  }, []);
+
+  /* ------------------------ LOAD FILTERS FROM URL ------------------------ */
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      setFilters(filtersFromSearchParams(window.location.search));
+      setFilters(
+        filtersFromSearchParams(window.location.search)
+      );
     }
   }, []);
 
-  /* ---------------------------- FILTER RESULTS ----------------------------- */
+  /* --------------------------- FILTER RESULTS ---------------------------- */
 
   const filteredProperties = useMemo(
     () => applyFilters(allProperties, filters),
     [allProperties, filters]
   );
 
-  /* ------------------------------------------------------------------------ */
+  /* ------------------------------ LOADING ------------------------------- */
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-muted-foreground text-lg">
+          Loading properties...
+        </p>
+      </div>
+    );
+  }
+
+  /* ---------------------------------------------------------------------- */
 
   return (
     <div className="min-h-screen bg-background">
+      {/* HERO SECTION */}
 
       <section className="border-b border-border px-6 py-20 text-center md:px-10">
-        
+        <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground">
+          {subtitle}
+        </p>
 
         <ScrollHighlightText className="mt-4 text-xl font-quicksand font-medium uppercase md:text-2xl">
-          properties around you
+          {title}
         </ScrollHighlightText>
       </section>
 

@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 
 import location from "../images/location.png";
 import bed from "../images/bedroom.png";
+import house from "../images/house.png";
 
 type Property = {
   id: string;
@@ -13,6 +14,8 @@ type Property = {
   bedrooms: number;
   image: string;
   location: string;
+  featured_image: string;
+  listing_type: string;
 };
 
 export function PropertyCard({
@@ -38,9 +41,9 @@ export function PropertyCard({
       <CardContent className="p-0">
 
         {/* IMAGE */}
-        <div className="overflow-hidden h-[240px] sm:h-[300px] md:h-[380px] bg-muted/10">
+        <div className="overflow-hidden h-[240px] sm:h-[300px] md:h-[280px] bg-muted/10">
           <img
-            src={property.image}
+            src={property.featured_image}
             alt={property.title}
             className="
               w-full
@@ -57,42 +60,70 @@ export function PropertyCard({
         <div className="pt-5 space-y-4">
 
           {/* TITLE + PRICE */}
-          <div className="flex items-start justify-between gap-4">
+          <div className="space-y-3">
 
-            <h2 className="text-md md:text-xl tracking-wide uppercase">
-              {property.title}
-            </h2>
+<h2
+  className="
+    text-md
+    md:text-lg
+    font-quicksand
+    font-medium
+    tracking-wide
+    uppercase
+    leading-relaxed
+    line-clamp-1
+    min-h-[56px]
+  "
+>
+  {property.title}
+</h2>
 
-            <p className="text-lg md:text-2xl font-medium text-accent whitespace-nowrap">
-              USD {property.price.toLocaleString()}
-            </p>
-          </div>
+<p
+  className="
+    text-lg
+    md:text-xl
+    font-medium
+    text-accent
+    tracking-wide
+  "
+>
+  USD {property.price.toLocaleString()}
+</p>
+</div>
+
 
           {/* DETAILS */}
           <div className="flex flex-wrap items-center gap-6 text-secondary">
 
-            <div className="flex items-center gap-2">
-              <img
-                src={bed}
-                alt="bed"
-                className="h-5 w-5"
-              />
+{/* SHOW BEDROOMS ONLY IF AVAILABLE */}
+{property.bedrooms > 0 && (
+  <div className="flex items-center gap-2">
+    <img
+      src={bed}
+      alt="bed"
+      className="h-5 w-5"
+    />
 
-              <span>
-                {property.bedrooms} Bedrooms
-              </span>
-            </div>
+    <span>
+      {property.bedrooms} Bedrooms
+    </span>
+  </div>
+)}
 
-            <div className="flex items-center gap-2">
-              <img
-                src={location}
-                alt="location"
-                className="h-5 w-5"
-              />
 
-              <span>{property.location}</span>
-            </div>
-          </div>
+{/* LOCATION */}
+<div className="flex items-center gap-2 min-w-0">
+  <img
+    src={location}
+    alt="location"
+    className="h-5 w-5 shrink-0"
+  />
+
+  <span className="line-clamp-1">
+    {property.location}
+  </span>
+</div>
+</div>
         </div>
       </CardContent>
     </Card>
