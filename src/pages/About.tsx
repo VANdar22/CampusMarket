@@ -2,11 +2,12 @@ import ScrollHighlightText from "@/components/ScrollHighlightText";
 import Footer from "@/components/ui/footer";
 import MeetTheTeam from "@/components/Team";
 import CoreValues from "@/components/CoreValue";
+import RevealImage from "@/components/RevealImage";
 
 export default function About() {
   return (
     <>
-      <div className="min-h-screen bg-[#ececec] px-5 py-10 md:px-16 lg:px-24">
+      <div className="min-h-screen bg-background px-5 py-10 md:px-16 lg:px-24">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[0.7fr_1.3fr] lg:items-start">
           {/* Left Portrait Image */}
           <div className="hidden md:flex items-end justify-start lg:min-h-[500px]">
@@ -23,11 +24,10 @@ export default function About() {
           <div className="space-y-8">
             {/* Hero Image */}
             <div className="overflow-hidden">
-              <img
-                src="https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1778520935/cosmos_1959895835_inipve.jpg"
-                alt="Nature neighborhood"
-                className="h-[300px] w-full object-cover md:h-[400px] lg:h-[450px]"
-              />
+            <RevealImage
+  src="https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1778520935/cosmos_1959895835_inipve.jpg"
+  height="450px"
+/>
             </div>
 
             {/* Intro */}

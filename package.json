@@ -13,6 +13,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@calcom/embed-react": "^1.5.3",
     "@dicebear/adventurer": "^9.4.2",
     "@dicebear/core": "^9.4.2",
     "@fortawesome/free-solid-svg-icons": "^7.2.0",

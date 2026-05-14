@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { getProperties } from "@/services/properties";
-
+import PropertyVideoGallery from "@/components/PropertyVideoGallery";
 import { useEffect, useState } from "react";
 
 import {
@@ -150,11 +150,15 @@ export default function PropertyDetails() {
   }, [id]);
 
   if (loading) {
-    return <div className="p-10 text-3xl font-[aboreto] text-accent">Loading...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center text-3xl font-[aboreto] text-accent">
+        Loading...
+      </div>
+    );
   }
   if (!property) {
     return (
-      <div className="p-10 font-[aboreto] text-accent">Property not found</div>
+      <div className="min-h-screen flex items-center justify-center text-3xl font-[aboreto] text-accent">Property not found</div>
     );
   }
 
@@ -193,13 +197,23 @@ export default function PropertyDetails() {
         {/* MAIN GRID */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
           {/* LEFT */}
-          <PropertyImageGallery
-            gallery_images={
-              Array.isArray(property.gallery_images)
-                ? property.gallery_images
-                : []
-            }
-          />
+          <div className="space-y-6">
+  <PropertyImageGallery
+    gallery_images={
+      Array.isArray(property.gallery_images)
+        ? property.gallery_images
+        : []
+    }
+  />
+
+  <PropertyVideoGallery
+    videos={
+      Array.isArray(property.videos)
+        ? property.videos
+        : []
+    }
+  />
+</div>
 
           {/* RIGHT */}
           <div className="space-y-6 lg:sticky lg:top-6 h-fit">

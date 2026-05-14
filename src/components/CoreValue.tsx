@@ -31,7 +31,7 @@ export default function CoreValues() {
   ];
 
   return (
-    <section className="relative bg-[#ececec] ">
+    <section className="relative bg-background ">
       {/* Heading */}
       <div className="mb-14 px-5 text-center">
         <ScrollHighlightText className="text-lg font-[quicksand] font-semibold text-gray-900 md:text-3xl">

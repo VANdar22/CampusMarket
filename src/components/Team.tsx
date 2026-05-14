@@ -22,7 +22,7 @@ export default function MeetTheTeam() {
     ];
   
     return (
-      <div className="min-h-screen bg-[#ececec] px-5 py-16 md:px-12 lg:px-24">
+      <div className="min-h-screen bg-background px-5 py-16 md:px-12 lg:px-24">
         
         {/* Heading */}
         <div className="mb-14 text-center">

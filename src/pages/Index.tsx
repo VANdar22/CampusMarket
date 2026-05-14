@@ -22,7 +22,8 @@ export default function Index() {
           .filter(
             (p: any) =>
               p.property_type === "Apartment" ||
-              p.property_type === "Townhouse"
+              p.property_type === "Townhouse" ||
+              p.property_type === "House"
           )
           .slice(0, 4);
 
@@ -40,46 +41,90 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-background flex flex-col overflow-x-hidden">
       <main className="flex-1">
-        {/* HERO */}
-        <section className="relative min-h-screen overflow-hidden pt-0 md:pt-20">
-          <div className="max-w-7xl mx-auto px-5 md:px-8">
-            <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
-              <div className="order-1 flex flex-col justify-center">
+
+        {/* HERO SECTION */}
+        <section className="relative overflow-hidden pt-10 md:pt-20">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="grid lg:grid-cols-2 gap-14 items-center">
+
+              {/* TEXT */}
+              <div className="order-1">
                 <div className="max-w-2xl mx-auto lg:mx-0">
-                  <ScrollHighlightText
-                    variant="background"
-                    className="
-                      mt-6
-                      text-lg
-                      sm:text-lg
-                      md:text-2xl
-                      lg:text-3xl
-                      leading-relaxed
-                      font-semibold
-                      text-gray-900
-                      font-[quicksand]
-                      justify-center
-                      text-center
-                      ml-5
-                      md:ml-0
-                      lg:text-left
-                    "
-                  >
-                    BUY, RENT & MANAGE PROPERTIES
+                  <ScrollHighlightText className="text-2xl  font-medium font-[quicksand] md:text-4xl text-center md:text-left leading-tight  tracking-tight text-black">
+                    Buy and rent properties in Ghana
                   </ScrollHighlightText>
 
-                  <p className="mt-6 text-md sm:text-lg md:text-xl leading-relaxed font-medium text-secondary font-[quicksand] text-center lg:text-left">
-                    We help you move forward with clarity, confidence, and the right agent by your side.
+                  <p className="mt-6 text-lg md:text-2xl text-center font-[quicksand] md:text-left leading-relaxed font-light text-secondary">
+                    We help you move forward with clarity,
+                    confidence, and the right agent by your side.
                   </p>
                 </div>
-              </div>
-            </div>
 
-            <div className="mt-20 md:mt-20">
-              <HeroParralax />
+                {/* MOBILE STATS */}
+                <div className="grid grid-cols-3 gap-4 mt-10 text-center lg:hidden">
+                  <div>
+                    <h2 className="text-xl font-medium font-[aboreto] text-accent">350+</h2>
+                    <p className="text-sm font-light font-[quicksand] text-secondary mt-1">
+                      Satisfied Clients
+                    </p>
+                  </div>
+
+                  <div>
+                    <h2 className="text-xl font-medium font-[aboreto] text-accent">120+</h2>
+                    <p className="text-sm font-light font-[quicksand] text-secondary mt-1">
+                      Properties Sold
+                    </p>
+                  </div>
+
+                  <div>
+                    <h2 className="text-xl font-medium font-[aboreto] text-accent">
+                      {new Date().getFullYear() - 2018}+
+                    </h2>
+                    <p className="text-sm font-light font-[quicksand] text-secondary mt-1">Years</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* DESKTOP STATS */}
+              <div className="hidden lg:flex flex-col gap-8 pt-2">
+
+                <div>
+                  <h2 className="text-xl font-light flex items-center gap-4 tracking-tight text-secondary">
+                    <span className="text-4xl font-[aboreto] font-semibold text-accent ">
+                      350+
+                    </span>
+                    Satisfied Clients
+                  </h2>
+                </div>
+
+                <div>
+                  <h2 className="text-xl font-light flex items-center gap-4 tracking-tight text-secondary">
+                    <span className="text-4xl font-[aboreto] font-semibold text-accent ">
+                      120+
+                    </span>
+                    Properties Sold
+                  </h2>
+                </div>
+
+                <div>
+                  <h2 className="text-xl font-light flex items-center gap-4 tracking-tight text-secondary">
+                    <span className="text-4xl font-[aboreto] font-semibold text-accent ">
+                      {new Date().getFullYear() - 2018}+
+                    </span>
+                    Years Experience
+                  </h2>
+                </div>
+
+              </div>
+
             </div>
           </div>
         </section>
+
+        {/* HERO PARALLAX */}
+        <div className="mt-20 md:mt-20">
+          <HeroParralax />
+        </div>
 
         {/* WORDS SECTION */}
         <section className="py-10 md:py-20 px-5 md:px-8">
@@ -91,22 +136,15 @@ export default function Index() {
         {/* PROPERTY SECTION */}
         <section className="py-10 px-5 md:px-10 md:py-10">
           <div className="max-w-7xl mt-20 md:mt-20 mx-auto">
-            {/* HEADING */}
+
             <div>
               <ScrollHighlightText
                 variant="background"
                 className="
-                  text-xl
-                  md:text-3xl
-                  font-[quicksand]
-                  leading-tight
-                  font-medium
-                  tracking-tight
-                  text-gray-600
-                  text-center
-                  lg:text-left
-                  ml-9
-                  md:ml-0
+                  text-xl md:text-3xl font-[quicksand]
+                  leading-tight font-medium tracking-tight
+                  text-gray-600 text-center lg:text-left
+                  ml-9 md:ml-0
                 "
               >
                 Discover Premium Properties
@@ -117,10 +155,11 @@ export default function Index() {
               </p>
             </div>
 
-            {/* GRID */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-6 items-start mt-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start mt-10">
               {loading ? (
-                <p className="text-center col-span-2">Loading properties...</p>
+                <p className="text-center font-semibold font-[aboreto] text-accent text-2xl col-span-2">
+                  Loading properties...
+                </p>
               ) : properties.length > 0 ? (
                 properties.map((property) => (
                   <PropertyCard
@@ -141,14 +180,15 @@ export default function Index() {
                 View All Properties
               </button>
             </div>
+
           </div>
         </section>
 
         {/* SHOWCASE */}
         <section className="w-full mt-10 text-white overflow-hidden">
           <RealEstateShowcase />
-
         </section>
+
       </main>
 
       <Footer />

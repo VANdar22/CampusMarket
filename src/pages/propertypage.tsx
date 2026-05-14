@@ -74,7 +74,7 @@ export default function ListingsPage({
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-muted-foreground text-lg">
+        <p className="text-accent font-semibold font-[aboreto] text-3xl">
           Loading properties...
         </p>
       </div>
@@ -88,18 +88,15 @@ export default function ListingsPage({
       {/* HERO SECTION */}
 
       <section className="border-b border-border px-6 py-20 text-center md:px-10">
-        <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground">
-          {subtitle}
-        </p>
-
+        
         <ScrollHighlightText className="mt-4 text-xl font-quicksand font-medium uppercase md:text-2xl">
-          {title}
+          Find your dream property
         </ScrollHighlightText>
       </section>
 
       {/* FILTER SECTION */}
 
-      <section className="mx-auto max-w-6xl px-6 py-12 md:px-10">
+      <section className="mx-auto max-w-6xl px-6 py-4 md:px-10">
         <PropertyFilter
           values={filters}
           onChange={setFilters}
@@ -129,7 +126,7 @@ export default function ListingsPage({
         {/* EMPTY STATE */}
 
         {filteredProperties.length === 0 && (
-          <p className="py-20 text-center text-muted-foreground">
+          <p className="py-20 text-center text-accent font-semibold font-[aboreto] text-3xl">
             No properties match your filters.
           </p>
         )}

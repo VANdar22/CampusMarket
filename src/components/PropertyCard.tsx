@@ -16,6 +16,7 @@ type Property = {
   location: string;
   featured_image: string;
   listing_type: string;
+  currency: string;
 };
 
 export function PropertyCard({
@@ -87,7 +88,7 @@ export function PropertyCard({
     tracking-wide
   "
 >
-  USD {property.price.toLocaleString()}
+  {property.currency} {property.price.toLocaleString()}
 </p>
 </div>
 

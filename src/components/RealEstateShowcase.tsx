@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
+import { getCalApi } from "@calcom/embed-react";
 
 import NewsletterParallax from "./NewsletterParallax";
 
@@ -10,25 +11,41 @@ const sections = [
     description:
       "We’ve done this over 10,000 times, and we know what wins.",
     image:
-    "https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1778626508/cosmos_2060372693_gen5y7.jpg"  },
+      "https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1778626508/cosmos_2060372693_gen5y7.jpg",
+  },
   {
     id: "02",
     title: "Sell",
     description:
       "Sell fast, sell high. Your listing gets pro staging, strategic pricing, constant open houses, and agents who never stop working until the right buyer signs.",
     image:
-    "https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1778626508/cosmos_2060372693_1_u0kunz.jpg"  },
+      "https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1778626508/cosmos_2060372693_1_u0kunz.jpg",
+  },
   {
     id: "03",
     title: "Rent",
     description:
       "Access hidden rentals before they hit the market through agents who know every landlord in town.",
     image:
-      "https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1778626508/cosmos_2060372693_2_ygcziz.jpg"  },
+      "https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1778626508/cosmos_2060372693_2_ygcziz.jpg",
+  },
 ];
 
 export default function HoverRevealSections() {
   const [active, setActive] = useState<number | null>(null);
+
+  const buttonRef = useRef(null);
+
+  useEffect(() => {
+    (async function () {
+      const cal = await getCalApi();
+
+      cal("ui", {
+        theme: "light",
+        layout: "month_view",
+      });
+    })();
+  }, []);
 
   return (
     <section className="w-full bg-black text-white">
@@ -62,10 +79,11 @@ export default function HoverRevealSections() {
 
               {/* MOBILE LAYOUT */}
               <div className="flex h-full flex-col justify-between md:hidden">
-                
+
                 {/* Top */}
                 <div className="flex items-start justify-between">
                   <div>
+
                     {/* Number */}
                     <div
                       className={`mb-4 flex h-10 w-10 items-center justify-center rounded-full border text-xs transition-all duration-500 ${
@@ -78,13 +96,15 @@ export default function HoverRevealSections() {
                     </div>
 
                     {/* Title */}
-                    <h2 className="text-5xl  font-[quicksand] font-light leading-none tracking-tight">
+                    <h2 className="text-5xl font-[quicksand] font-light leading-none tracking-tight">
                       {section.title}
                     </h2>
                   </div>
 
-                  {/* Arrow */}
+                  {/* MOBILE CAL BUTTON */}
                   <button
+                    ref={buttonRef}
+                    data-cal-link="armah-20985615-g9ipuz"
                     className={`
                       flex h-14 w-14 items-center justify-center rounded-full border transition-all duration-500
                       ${
@@ -131,8 +151,10 @@ export default function HoverRevealSections() {
                   </h2>
                 </div>
 
-                {/* Arrow */}
+                {/* DESKTOP CAL BUTTON */}
                 <button
+                  ref={buttonRef}
+                  data-cal-link="armah-20985615-g9ipuz"
                   className={`
                     relative flex h-28 w-28 items-center justify-center rounded-full border transition-all duration-500
                     ${
@@ -148,13 +170,14 @@ export default function HoverRevealSections() {
                     }`}
                   />
                 </button>
+
               </div>
             </div>
           </div>
         );
       })}
-                <NewsletterParallax />
 
+      <NewsletterParallax />
     </section>
   );
 }

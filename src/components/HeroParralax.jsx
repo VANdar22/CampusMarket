@@ -1,8 +1,12 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import RevealImage from "@/components/RevealImage";
+
 
 gsap.registerPlugin(ScrollTrigger);
+
+
 
 export default function HeroParallax() {
   const containerRef = useRef(null);
