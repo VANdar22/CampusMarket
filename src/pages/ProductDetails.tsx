@@ -11,11 +11,14 @@ import {
 
 import bed from "../images/bedroom.png";
 import bath from "../images/bathroom.png";
+import size from "../images/size.png";
 import check from "../images/check.png";
 import house from "../images/house.png";
 import location from "../images/location.png";
 
 import ScrollHighlightText from "../components/ScrollHighlightText";
+
+
 
 // -----------------------------------
 // IMAGE GALLERY
@@ -124,6 +127,8 @@ export default function PropertyDetails() {
   const [properties, setProperties] = useState<any[]>([]);
 
   const [loading, setLoading] = useState(true);
+  const isLand = property?.property_type?.toLowerCase() === "land";
+
 
   const [openAccordion, setOpenAccordion] = useState(1);
 
@@ -239,38 +244,60 @@ export default function PropertyDetails() {
               </h2>
             </div>
 
-            {/* QUICK INFO */}
-            <div className="grid grid-cols-3 gap-4 border-y py-6">
-              <div className="text-center">
-                <img src={bed} className="mx-auto h-3 w-3 md:h-6 md:w-6 mb-3" />
+<div className="grid grid-cols-3 gap-4 border-y py-6">
 
-                <p className="text-sm md:text-lg text-muted-foreground font-[quicksand]">
-                  {property.bedrooms} Bedrooms
-                </p>
-              </div>
+  {/* BEDROOMS OR LAND SIZE */}
+  <div className="text-center">
+    <img
+      src={isLand ? bed : bed}
+      className="mx-auto h-3 w-3 md:h-6 md:w-6 mb-3"
+    />
 
-              <div className="text-center">
-                <img
-                  src={bath}
-                  className="mx-auto h-3 w-3 md:h-6 md:w-6 mb-3"
-                />
+    <p className="text-sm md:text-lg text-muted-foreground font-[quicksand]">
+      {property.bedrooms ?? "N/A"} Bedroom
+    </p>
+  </div>
 
-                <p className="text-sm md:text-lg text-muted-foreground font-[quicksand]">
-                  {property.bathrooms} Bathrooms
-                </p>
-              </div>
+  {/* BATHROOMS OR LAND LABEL */}
+  <div className="text-center">
+    {!isLand ? (
+      <>
+        <img
+          src={bath}
+          className="mx-auto h-3 w-3 md:h-6 md:w-6 mb-3"
+        />
 
-              <div className="text-center">
-                <img
-                  src={house}
-                  className="mx-auto h-3 w-3 md:h-6 md:w-6 mb-3"
-                />
+        <p className="text-sm md:text-lg text-muted-foreground font-[quicksand]">
+          {property.bathrooms ?? "N/A"} Bathrooms
+        </p>
+      </>
+    ) : (
+      <>
+        <img
+          src={size}
+          className="mx-auto h-3 w-3 md:h-6 md:w-6 mb-3"
+        />
 
-                <p className="text-sm md:text-lg text-muted-foreground font-[quicksand]">
-                  {property.property_type}
-                </p>
-              </div>
-            </div>
+        <p className="text-sm md:text-lg text-muted-foreground font-[quicksand]">
+          {property.land_size ?? "N/A"} 
+        </p>
+      </>
+    )}
+  </div>
+
+  {/* PROPERTY TYPE */}
+  <div className="text-center">
+    <img
+      src={house}
+      className="mx-auto h-3 w-3 md:h-6 md:w-6 mb-3"
+    />
+
+    <p className="text-sm md:text-lg text-muted-foreground font-[quicksand]">
+      {property.property_type}
+    </p>
+  </div>
+
+</div>
 
             {/* ACCORDIONS */}
             <div className="space-y-4">
