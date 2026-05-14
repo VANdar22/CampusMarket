@@ -84,27 +84,27 @@ sahmangara@gmail.com            </a>
 
           {/* NAV */}
           <div className="flex flex-wrap justify-center gap-5 text-sm md:text-md text-accent font-semibold font-[Aboreto] text-center">
-            <a href="#" className="hover:text-secondary transition">
+            <a href="/" className="hover:text-secondary transition">
               Home
             </a>
 
-            <a href="#" className="hover:text-secondary transition">
+            <a href="#/property" className="hover:text-secondary transition">
               Search Properties
             </a>
 
-            <a href="#" className="hover:text-secondary transition">
+            <a href="#/about" className="hover:text-secondary transition">
               About Us
             </a>
 
-            <a href="#" className="hover:text-secondary transition">
+            <a href="#/contact" className="hover:text-secondary transition">
               Contact
             </a>
 
-            <a href="#" className="hover:text-secondary transition">
+            <a href="#/legal" className="hover:text-secondary transition">
               Policy
             </a>
 
-            <a href="#" className="hover:text-secondary transition">
+            <a href="#/legal" className="hover:text-secondary transition">
               Cookies
             </a>
           </div>

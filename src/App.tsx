@@ -13,6 +13,7 @@ import Blog from "./pages/Blog";
 import NavBar from "./components/Navbar";
 import ListingsPage from "./pages/propertypage";
 import Contact from "./pages/Contact";
+import Legal from "./pages/legal";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +43,7 @@ const App = () => (
                 <Route path="/property/:id" element={<ProductDetails />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/legal" element={<Legal />} />
               </Routes>
             </AppLayout>
           </HashRouter>
