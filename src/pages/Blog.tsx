@@ -1,4 +1,6 @@
 import ScrollHighlightText from "@/components/ScrollHighlightText";
+import RevealImage from "@/components/RevealImage";
+
 
 const blogs = [
   {
@@ -50,10 +52,11 @@ export default function BlogPage() {
                 : ""
             }`}
           >
-            <img
+            <RevealImage
               src={blog.image}
               alt={blog.title}
-              className="w-full h-[350px] object-cover"
+              height="350px"
+              
             />
           </div>
 
