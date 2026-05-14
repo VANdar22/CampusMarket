@@ -75,7 +75,7 @@ export default function About() {
               </p>
               
 
-              <ScrollHighlightText variant="background-blue" className="text-base leading-relaxed text-gray-600 mt-4 md:text-lg lg:text-xl">
+              <ScrollHighlightText variant="background-blue" className="text-base leading-relaxed font-[quicksand] text-gray-600 mt-4 md:text-lg lg:text-xl">
                 Our goal is to help clients maximize the value of their
                 investments while finding the perfect residential and commercial
                 properties.

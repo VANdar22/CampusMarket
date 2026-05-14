@@ -12,7 +12,7 @@ interface PropertyVideoGalleryProps {
         {videos.map((video, index) => (
           <div
             key={index}
-            className="overflow-hidden rounded-2xl bg-black"
+            className="overflow-hidden border-2 border-accent bg-transparent"
           >
             <video
               controls

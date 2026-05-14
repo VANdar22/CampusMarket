@@ -64,11 +64,10 @@ export default function LuxuryFooter() {
           {/* CONTACT */}
           <div className="flex flex-col md:flex-row items-center font-[quicksand] font-light gap-4 md:gap-10 text-sm md:text-lg text-black text-center">
             <a
-              href="mailto:vandar@smshomefinder.com"
+              href="mailto:sahmangara@gmail.com"
               className="u hover:opacity-70 transition break-all"
             >
-              vandar@smshomefinder.com
-            </a>
+sahmangara@gmail.com            </a>
 
             <a href="tel:+233537435123" className="hover:opacity-70 font-[quicksand] transition">
               +233 53 743 5123

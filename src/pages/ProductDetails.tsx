@@ -186,7 +186,7 @@ export default function PropertyDetails() {
       <div className="max-w-7xl mx-auto px-6 pt-6">
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-sm text-muted-foreground"
+          className="flex items-center gap-2 text-sm font-[aboreto] text-accent font-medium"
         >
           <ArrowLeft className="h-4 w-4" />
           Back

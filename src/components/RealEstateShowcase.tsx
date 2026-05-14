@@ -9,7 +9,7 @@ const sections = [
     id: "01",
     title: "Buy",
     description:
-      "We’ve done this over 10,000 times, and we know what wins.",
+      "We’ve done this multiple times, and we know what wins.",
     image:
       "https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1778626508/cosmos_2060372693_gen5y7.jpg",
   },
@@ -17,7 +17,7 @@ const sections = [
     id: "02",
     title: "Sell",
     description:
-      "Sell fast, sell high. Your listing gets pro staging, strategic pricing, constant open houses, and agents who never stop working until the right buyer signs.",
+      "Sell fast, sell high. Strategic pricing, constant open houses, and agents who never stop working until the right buyer signs.",
     image:
       "https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1778626508/cosmos_2060372693_1_u0kunz.jpg",
   },
@@ -41,13 +41,14 @@ export default function HoverRevealSections() {
       const cal = await getCalApi();
 
       cal("ui", {
-        theme: "light",
+        theme: "dark",
         layout: "month_view",
       });
     })();
   }, []);
 
   return (
+    <>
     <section className="w-full bg-black text-white">
       {sections.map((section, index) => {
         const isActive = active === index;
@@ -177,7 +178,8 @@ export default function HoverRevealSections() {
         );
       })}
 
-      <NewsletterParallax />
     </section>
+    <NewsletterParallax />
+    </>
   );
 }

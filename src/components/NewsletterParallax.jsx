@@ -120,10 +120,13 @@ export default function HeroParallax() {
               md:w-auto
               h-12 sm:h-14 md:h-16
               px-8
-              bg-[#f5f5f5]
-              hover:bg-[#145a98]
-              text-black
-              hover:text-accent
+              bg-[#145a98]
+              hover:bg-[#f5f5f5]
+              text-accent
+
+              hover:text-[#145a98]
+              border
+              border-accent
               font-semibold
               font-[Aboreto]
               tracking-[0.15em]

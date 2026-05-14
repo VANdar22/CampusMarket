@@ -53,8 +53,8 @@ export default function ContactPage() {
               </ScrollHighlightText>
               <p className="text-muted-foreground mt-2 font-[quicksand] leading-7">
                 SMS HomeFinder <br />
-                Accra, Ghana
-              </p>
+                GA 363-1488               </p>
+                <p className="text-muted-foreground font-[quicksand] leading-7">Laterbiokorshie-Town Council Line Market Street </p>
             </div>
 
             <div>
@@ -62,21 +62,21 @@ export default function ContactPage() {
                 Phone
               </ScrollHighlightText>
               <p className="text-muted-foreground mt-2 font-[quicksand]">
-                +233 24 000 0000
+                +233 53 743 5123
               </p>
             </div>
 
             <div>
-              <ScrollHighlightText  variant="background-blue" className="text-xl font-[quicksand] font-medium mb-3">
+              <ScrollHighlightText variant="background-blue" className="text-xl font-[quicksand] font-medium mb-3">
                 Email
               </ScrollHighlightText>
               <p className="text-muted-foreground mt-2 font-[quicksand]">
-                info@smshomefinder.com
+                sahmangara@gmail.com
               </p>
             </div>
 
             <div>
-              <ScrollHighlightText  variant="background-blue" className="text-xl font-[quicksand] font-medium mb-3">
+              <ScrollHighlightText variant="background-blue" className="text-xl font-[quicksand] font-medium mb-3">
                 Working Hours
               </ScrollHighlightText>
               <p className="text-muted-foreground mt-2 font-[quicksand] leading-7">

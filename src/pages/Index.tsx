@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 
 import Footer from "@/components/ui/footer";
 import { PropertyCard } from "@/components/PropertyCard";
@@ -37,6 +38,7 @@ export default function Index() {
 
     fetchProperties();
   }, []);
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-background flex flex-col overflow-x-hidden">
@@ -137,22 +139,35 @@ export default function Index() {
         <section className="py-10 px-5 md:px-10 md:py-10">
           <div className="max-w-7xl mt-20 md:mt-20 mx-auto">
 
-            <div>
-              <ScrollHighlightText
-                variant="background"
-                className="
-                  text-xl md:text-3xl font-[quicksand]
-                  leading-tight font-medium tracking-tight
-                  text-gray-600 text-center lg:text-left
-                  ml-9 md:ml-0
-                "
-              >
-                Discover Premium Properties
-              </ScrollHighlightText>
+            {/* HEADING ROW — title left, button right on desktop */}
+            <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between">
+              <div>
+                <ScrollHighlightText
+                  variant="background"
+                  className="
+                    text-xl md:text-3xl font-[quicksand]
+                    leading-tight font-medium tracking-tight
+                    text-gray-600 text-center lg:text-left
+                    ml-9 md:ml-0
+                  "
+                >
+                  Discover Premium Properties
+                </ScrollHighlightText>
 
-              <p className="mt-5 text-md mb-5 md:text-xl font-medium text-secondary text-center lg:text-left font-[quicksand] max-w-3xl">
-                We help you find the best properties tailored to your needs.
-              </p>
+                <p className="mt-5 text-md md:text-xl font-medium text-secondary text-center lg:text-left font-[quicksand] max-w-3xl">
+                  We help you find the best properties tailored to your needs.
+                </p>
+              </div>
+
+              {/* DESKTOP VIEW ALL — right side */}
+              <div className="hidden lg:flex shrink-0 pb-1">
+                <button
+                  onClick={() => navigate('/property')}
+                  className="flex items-center justify-center h-10 px-6 bg-[#145a98] hover:bg-[#f5f5f5] text-accent hover:text-[#145a98] border border-accent font-semibold font-[Aboreto] tracking-widest transition-all duration-300 text-xs whitespace-nowrap"
+                >
+                  View All Properties
+                </button>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start mt-10">
@@ -174,9 +189,9 @@ export default function Index() {
               )}
             </div>
 
-            {/* MOBILE BUTTON */}
+            {/* MOBILE VIEW ALL — bottom */}
             <div className="flex justify-center mt-8 lg:hidden">
-              <button className="w-[75%] flex items-center justify-center h-10 px-5 bg-[#145a98] hover:bg-[#f5f5f5] text-accent hover:text-black font-semibold font-[Aboreto] tracking-[0.1em] transition-all duration-300 text-xs">
+              <button onClick={() => navigate('/property')} className="w-[75%] flex items-center justify-center h-10 px-5 bg-[#145a98] hover:bg-[#f5f5f5] text-accent hover:text-[#145a98] border border-accent font-semibold font-[Aboreto] tracking-widest transition-all duration-300 text-xs">
                 View All Properties
               </button>
             </div>

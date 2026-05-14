@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import icon from "../images/sms.png";
 import facebook from "../images/facebook.png";
@@ -10,6 +10,7 @@ import whatsapp from "../images/Whatsapp.png";
 export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showNavbar, setShowNavbar] = useState(true);
+  const location = useLocation();
 
   const navItems = [
     { name: "Properties", href: "/property" },
@@ -33,6 +34,8 @@ export function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const isActive = (href: string) => location.pathname === href;
 
   return (
     <header
@@ -63,18 +66,22 @@ export function Navbar() {
             <Link
               key={item.name}
               to={item.href}
-              className="
-                text-sm
-                uppercase
-                tracking-[0.15em]
-                font-[quicksand]
-                font-semibold
-                text-secondary
-                hover:text-accent
+              className={`
+                relative text-sm uppercase tracking-[0.15em]
+                font-[quicksand] font-semibold
                 transition-colors duration-300
-              "
+                ${isActive(item.href) ? "text-accent" : "text-secondary hover:text-accent"}
+              `}
             >
               {item.name}
+              {/* active underbar */}
+              <span
+                className={`
+                  absolute -bottom-1 left-0 h-[2px] bg-accent
+                  transition-all duration-300
+                  ${isActive(item.href) ? "w-full" : "w-0"}
+                `}
+              />
             </Link>
           ))}
 
@@ -165,22 +172,26 @@ export function Navbar() {
               key={item.name}
               to={item.href}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="
-                text-sm
-                uppercase
-                tracking-[0.15em]
-                text-secondary
-                hover:text-accent
-                transition-colors duration-300
-              "
+              className={`
+                text-sm uppercase tracking-[0.15em]
+                transition-colors duration-300 flex items-center gap-3
+                ${isActive(item.href) ? "text-accent font-semibold" : "text-secondary hover:text-accent"}
+              `}
             >
+              {/* mobile active dot */}
+              <span
+                className={`
+                  inline-block w-1.5 h-1.5 rounded-full bg-accent shrink-0
+                  transition-opacity duration-300
+                  ${isActive(item.href) ? "opacity-100" : "opacity-0"}
+                `}
+              />
               {item.name}
             </Link>
           ))}
 
           {/* MOBILE SOCIAL ICONS */}
-          <div className="flex items-center gap-5 pt-6  border-t border-black/10">
-
+          <div className="flex items-center gap-5 pt-6 border-t border-black/10">
             <a href="#"><img src={facebook} alt="Facebook" className="w-6 h-6 rounded-full bg-linear-to-r from-blue-500 to-white" /></a>
             <a href="#"><img src={instagram} alt="Instagram" className="w-6 h-6 rounded-full bg-linear-to-r from-pink-500 to-purple-500" /></a>
             <a href="#"><img src={whatsapp} alt="Whatsapp" className="w-6 h-6 rounded-full bg-linear-to-r from-green-700 to-white" /></a>

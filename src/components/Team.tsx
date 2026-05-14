@@ -15,11 +15,10 @@ export default function MeetTheTeam() {
         image:
         "https://res.cloudinary.com/dvsdcgu9q/image/upload/v1778622057/smsstaff1_tcpivx.jpg"      },
       {
-        name: "Nuratu Jibril",
+        name: "Rasa Simone ",
         position: "Secretary General",
         image:
-        "https://res.cloudinary.com/dvsdcgu9q/image/upload/v1778622058/smsstaff3_z4hcrc.jpg"      },
-    ];
+        "https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1778752268/smsstaff3_huam7s.jpg" }   ];
   
     return (
       <div className="min-h-screen bg-background px-5 py-16 md:px-12 lg:px-24">
@@ -51,7 +50,7 @@ export default function MeetTheTeam() {
   
               {/* Text Below Image */}
               <div className="p-5 text-left">
-                <h2 className="text-lg font-medium font-[quicksand] text-gray-900">
+                <h2 className="text-lg font-medium font-[quicksand] text-gray-700">
                   {member.name}
                 </h2>
   
