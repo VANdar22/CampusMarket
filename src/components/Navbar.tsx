@@ -51,12 +51,13 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
 
         {/* LOGO */}
-        <Link to="/" className="flex items-center shrink-0">
+        <Link to="/" className="flex items-center gap-1 shrink-0">
           <img
             src={icon}
             alt="Logo"
             className="h-18 w-18 md:h-16 md:w-16 object-contain"
           />
+          <p className="text-md md:text-2xl mt-1 text-accent/90 font-[aboreto] font-semibold">SMS HomeFinder</p>
         </Link>
 
         {/* DESKTOP NAV */}

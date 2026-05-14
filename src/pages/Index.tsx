@@ -52,10 +52,9 @@ export default function Index() {
               {/* TEXT */}
               <div className="order-1">
                 <div className="max-w-2xl mx-auto lg:mx-0">
-                  <ScrollHighlightText className="text-2xl  font-medium font-[quicksand] md:text-4xl text-center md:text-left leading-tight  tracking-tight text-black">
-                    Buy and rent properties in Ghana
+                  <ScrollHighlightText className="text-xl ml-4 md:ml-0 font-medium font-[quicksand] md:text-4xl text-center md:text-left leading-tight  tracking-tight text-black">
+                    Buy, Rent & Manage Your Properties  
                   </ScrollHighlightText>
-
                   <p className="mt-6 text-lg md:text-2xl text-center font-[quicksand] md:text-left leading-relaxed font-light text-secondary">
                     We help you move forward with clarity,
                     confidence, and the right agent by your side.
@@ -191,7 +190,7 @@ export default function Index() {
 
             {/* MOBILE VIEW ALL — bottom */}
             <div className="flex justify-center mt-8 lg:hidden">
-              <button onClick={() => navigate('/property')} className="w-[75%] flex items-center justify-center h-10 px-5 bg-[#145a98] hover:bg-[#f5f5f5] text-accent hover:text-[#145a98] border border-accent font-semibold font-[Aboreto] tracking-widest transition-all duration-300 text-xs">
+              <button onClick={() => navigate('/property')} className="w-[75%] flex items-center justify-center h-10 px-5 bg-[#145a98] hover:bg-[#f5f5f5] text-accent hover:text-[#145a98] font-semibold font-[Aboreto] tracking-widest transition-all duration-300 text-xs">
                 View All Properties
               </button>
             </div>
