@@ -39,7 +39,7 @@ export default function LuxuryFooter() {
             </h2>
 
             <h3 className="text-sm md:text-lg font-[quicksand] font-light text-secondary tracking-wide leading-snug max-w-xs">
-              Luxury Properties Successfully Marketed and Sold Across Barbados
+              Luxury Properties Successfully Marketed and Sold Across Ghana
             </h3>
           </div>
         </div>
@@ -56,9 +56,6 @@ export default function LuxuryFooter() {
               alt="logo"
               className="h-10 md:h-12 object-contain opacity-80"
             />
-
-           
-
           </div>
 
           {/* CONTACT */}
@@ -67,9 +64,13 @@ export default function LuxuryFooter() {
               href="mailto:sahmangara@gmail.com"
               className="u hover:opacity-70 transition break-all"
             >
-sahmangara@gmail.com            </a>
+              sahmangara@gmail.com{" "}
+            </a>
 
-            <a href="tel:+233537435123" className="hover:opacity-70 font-[quicksand] transition">
+            <a
+              href="tel:+233537435123"
+              className="hover:opacity-70 font-[quicksand] transition"
+            >
               +233 53 743 5123
             </a>
           </div>
@@ -109,30 +110,46 @@ sahmangara@gmail.com            </a>
             </a>
           </div>
           {/* SOCIALS */}
-          <div className="flex items-center gap-3 md:gap-4">
-            {[facebook, instagram, whatsapp].map((icon, index) => (
-              <div
-                key={index}
-                className="
+        {/* SOCIALS */}
+<div className="flex items-center gap-3 md:gap-4">
+  {[
+    {
+      icon: facebook,
+      link: "https://www.facebook.com/profile.php?id=61587475613157",
+    },
+    {
+      icon: instagram,
+      link: "https://www.instagram.com/smshomefinder?igsh=Ym1hZGlsNmRtYmho",
+    },
+    {
+      icon: whatsapp,
+      link: "https://wa.me/233537435123",
+    },
+  ].map((social, index) => (
+    <a
+      key={index}
+      href={social.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="
         w-10 h-10 md:w-12 md:h-12
         rounded-full
         border border-accent
         flex items-center justify-center
         hover:bg-gray-200
-
         transition-all duration-300
         cursor-pointer
         p-2
       "
-              >
-                <img
-                  src={icon}
-                  alt="social"
-                  className="w-4 h-4 md:w-5 md:h-5 object-contain"
-                />
-              </div>
-            ))}
-          </div>
+    >
+      <img
+        src={social.icon}
+        alt="social"
+        className="w-4 h-4 md:w-5 md:h-5 object-contain"
+      />
+    </a>
+  ))}
+</div>
         </div>
       </div>
     </footer>

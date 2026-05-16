@@ -90,21 +90,27 @@ export function Navbar() {
           <div className="flex items-center gap-3 ml-6">
 
             <a
-              href="#"
+              href="https://www.facebook.com/profile.php?id=61587475613157"
+              target="_blank"
+              rel="noopener noreferrer"
               className="w-6 h-6 flex items-center justify-center rounded-full hover:bg-gradient-to-r from-blue-500 to-white transition"
             >
               <img src={facebook} alt="Facebook" />
             </a>
 
             <a
-              href="#"
+              href="https://www.instagram.com/smshomefinder?igsh=Ym1hZGlsNmRtYmho"
+              target="_blank"
+              rel="noopener noreferrer"
               className="w-6 h-6 flex items-center justify-center rounded-full hover:bg-gradient-to-r from-red-500 to-purple-500 transition"
             >
               <img src={instagram} alt="Instagram" />
             </a>
 
             <a
-              href="#"
+              href="https://wa.me/233537435123"
+              target="_blank"
+              rel="noopener noreferrer"
               className="w-6 h-6 flex items-center justify-center rounded-full hover:bg-gradient-to-r from-green-700 to-white transition"
             >
               <img src={whatsapp} alt="Whatsapp" />

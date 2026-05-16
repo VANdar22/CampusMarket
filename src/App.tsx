@@ -3,7 +3,7 @@ import { HashRouter, Routes, Route, useLocation } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import ScrollToTop from "./components/ScrollToTop";
-
+import { Analytics } from "@vercel/analytics/react";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 import Index from "./pages/Index";
@@ -34,7 +34,9 @@ const App = () => (
         <Toaster />
         <Sonner />
           <HashRouter>
+
             <AppLayout>
+              <Analytics />
               <ScrollToTop />
               <Routes>
                 <Route path="/" element={<Index />} />
@@ -45,6 +47,7 @@ const App = () => (
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/legal" element={<Legal />} />
               </Routes>
+              <Analytics />
             </AppLayout>
           </HashRouter>
       </TooltipProvider>
