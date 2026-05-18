@@ -80,7 +80,7 @@ export default function LuxuryFooter() {
         <div className="flex flex-col xl:flex-row justify-between items-center gap-8 md:gap-10 pb-6 md:pb-12">
           {/* COPYRIGHT */}
           <p className="text-sm md:text-md text-secondary font-[quicksand] font-light text-center xl:text-left">
-            ©2024 SMS HomeFinder. All rights reserved.
+            ©2026 SMS HomeFinder. All rights reserved.
           </p>
 
           {/* NAV */}

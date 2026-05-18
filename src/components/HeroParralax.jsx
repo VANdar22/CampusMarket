@@ -40,7 +40,7 @@ export default function HeroParallax() {
     >
       <img
         ref={imageRef}
-        src="https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1778445751/Screenshot_2026-05-10_202837_ayciog.png"
+        src="https://res.cloudinary.com/dvsdcgu9q/image/upload/q_auto/f_auto/v1779087280/Screenshot_2026-05-10_202837_ayciog.png"
         alt="Luxury Properties"
         className="absolute inset-0 w-full h-[120%] object-cover"
       />

@@ -199,9 +199,9 @@ export function Navbar() {
 
           {/* MOBILE SOCIAL ICONS */}
           <div className="flex items-center gap-5 pt-6 border-t border-black/10">
-            <a href="#"><img src={facebook} alt="Facebook" className="w-6 h-6 rounded-full bg-linear-to-r from-blue-500 to-white" /></a>
-            <a href="#"><img src={instagram} alt="Instagram" className="w-6 h-6 rounded-full bg-linear-to-r from-pink-500 to-purple-500" /></a>
-            <a href="#"><img src={whatsapp} alt="Whatsapp" className="w-6 h-6 rounded-full bg-linear-to-r from-green-700 to-white" /></a>
+            <a href="#"><img src={facebook} alt="Facebook" className="w-6 h-6 rounded-full" /></a>
+            <a href="#"><img src={instagram} alt="Instagram" className="w-6 h-6 rounded-full" /></a>
+            <a href="#"><img src={whatsapp} alt="Whatsapp" className="w-6 h-6 rounded-full" /></a>
           </div>
 
         </div>
