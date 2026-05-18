@@ -3,11 +3,7 @@ import { getProperties } from "@/services/properties";
 import PropertyVideoGallery from "@/components/PropertyVideoGallery";
 import { useEffect, useState } from "react";
 
-import {
-  ArrowLeft,
-  Plus,
-  Minus,
-} from "lucide-react";
+import { ArrowLeft, Plus, Minus } from "lucide-react";
 
 import bed from "../images/bedroom.png";
 import bath from "../images/bathroom.png";
@@ -18,15 +14,15 @@ import location from "../images/location.png";
 
 import ScrollHighlightText from "../components/ScrollHighlightText";
 
-
-
 // -----------------------------------
 // IMAGE GALLERY
 // -----------------------------------
 interface PropertyImageGalleryProps {
   gallery_images: any[];
 }
-const PropertyImageGallery = ({ gallery_images }: PropertyImageGalleryProps) => {
+const PropertyImageGallery = ({
+  gallery_images,
+}: PropertyImageGalleryProps) => {
   return (
     <div className="w-full">
       {/* DESKTOP */}
@@ -84,8 +80,7 @@ const RelatedPropertyCard = ({ item }: any) => {
       <img
         src={
           item.featured_image ||
-          (Array.isArray(item.gallery_images) &&
-          item.gallery_images.length > 0
+          (Array.isArray(item.gallery_images) && item.gallery_images.length > 0
             ? typeof item.gallery_images[0] === "string"
               ? item.gallery_images[0]
               : item.gallery_images[0]?.url
@@ -129,7 +124,6 @@ export default function PropertyDetails() {
   const [loading, setLoading] = useState(true);
   const isLand = property?.property_type?.toLowerCase() === "land";
 
-
   const [openAccordion, setOpenAccordion] = useState(1);
 
   useEffect(() => {
@@ -163,7 +157,9 @@ export default function PropertyDetails() {
   }
   if (!property) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-3xl font-[aboreto] text-accent">Property not found</div>
+      <div className="min-h-screen flex items-center justify-center text-3xl font-[aboreto] text-accent">
+        Property not found
+      </div>
     );
   }
 
@@ -180,8 +176,7 @@ export default function PropertyDetails() {
   const relatedProperties = properties
     .filter(
       (item: any) =>
-        item.id !== property.id &&
-        item.listing_type === property.listing_type
+        item.id !== property.id && item.listing_type === property.listing_type
     )
     .slice(0, 3);
 
@@ -203,22 +198,18 @@ export default function PropertyDetails() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
           {/* LEFT */}
           <div className="space-y-6">
-  <PropertyImageGallery
-    gallery_images={
-      Array.isArray(property.gallery_images)
-        ? property.gallery_images
-        : []
-    }
-  />
+            <PropertyImageGallery
+              gallery_images={
+                Array.isArray(property.gallery_images)
+                  ? property.gallery_images
+                  : []
+              }
+            />
 
-  <PropertyVideoGallery
-    videos={
-      Array.isArray(property.videos)
-        ? property.videos
-        : []
-    }
-  />
-</div>
+            <PropertyVideoGallery
+              videos={Array.isArray(property.videos) ? property.videos : []}
+            />
+          </div>
 
           {/* RIGHT */}
           <div className="space-y-6 lg:sticky lg:top-6 h-fit">
@@ -239,65 +230,62 @@ export default function PropertyDetails() {
             {/* PRICE */}
             <div>
               <h2 className="text-2xl md:text-3xl font-[Aboreto] text-accent">
-                {property.currency}{" "}
-                {Number(property.price).toLocaleString()}
+                {property.currency} {Number(property.price).toLocaleString()}
               </h2>
             </div>
 
-<div className="grid grid-cols-3 gap-4 border-y py-6">
+            <div className="grid grid-cols-3 gap-4 border-y py-6">
+              {/* BEDROOMS OR LAND SIZE */}
+              <div className="text-center">
+                <img
+                  src={isLand ? bed : bed}
+                  className="mx-auto h-3 w-3 md:h-6 md:w-6 mb-3"
+                />
 
-  {/* BEDROOMS OR LAND SIZE */}
-  <div className="text-center">
-    <img
-      src={isLand ? bed : bed}
-      className="mx-auto h-3 w-3 md:h-6 md:w-6 mb-3"
-    />
+                <p className="text-sm md:text-lg text-muted-foreground font-[quicksand]">
+                  {property.bedrooms ?? "N/A"} Bedroom
+                </p>
+              </div>
 
-    <p className="text-sm md:text-lg text-muted-foreground font-[quicksand]">
-      {property.bedrooms ?? "N/A"} Bedroom
-    </p>
-  </div>
+              {/* BATHROOMS OR LAND LABEL */}
+              <div className="text-center">
+                {!isLand ? (
+                  <>
+                    <img
+                      src={bath}
+                      className="mx-auto h-3 w-3 md:h-6 md:w-6 mb-3"
+                    />
 
-  {/* BATHROOMS OR LAND LABEL */}
-  <div className="text-center">
-    {!isLand ? (
-      <>
-        <img
-          src={bath}
-          className="mx-auto h-3 w-3 md:h-6 md:w-6 mb-3"
-        />
+                    <p className="text-sm md:text-lg text-muted-foreground font-[quicksand]">
+                      {property.bathrooms ?? "N/A"} Bathrooms
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <img
+                      src={size}
+                      className="mx-auto h-3 w-3 md:h-6 md:w-6 mb-3"
+                    />
 
-        <p className="text-sm md:text-lg text-muted-foreground font-[quicksand]">
-          {property.bathrooms ?? "N/A"} Bathrooms
-        </p>
-      </>
-    ) : (
-      <>
-        <img
-          src={size}
-          className="mx-auto h-3 w-3 md:h-6 md:w-6 mb-3"
-        />
+                    <p className="text-sm md:text-lg text-muted-foreground font-[quicksand]">
+                      {property.land_size ?? "N/A"}
+                    </p>
+                  </>
+                )}
+              </div>
 
-        <p className="text-sm md:text-lg text-muted-foreground font-[quicksand]">
-          {property.land_size ?? "N/A"} 
-        </p>
-      </>
-    )}
-  </div>
+              {/* PROPERTY TYPE */}
+              <div className="text-center">
+                <img
+                  src={house}
+                  className="mx-auto h-3 w-3 md:h-6 md:w-6 mb-3"
+                />
 
-  {/* PROPERTY TYPE */}
-  <div className="text-center">
-    <img
-      src={house}
-      className="mx-auto h-3 w-3 md:h-6 md:w-6 mb-3"
-    />
-
-    <p className="text-sm md:text-lg text-muted-foreground font-[quicksand]">
-      {property.property_type}
-    </p>
-  </div>
-
-</div>
+                <p className="text-sm md:text-lg text-muted-foreground font-[quicksand]">
+                  {property.property_type}
+                </p>
+              </div>
+            </div>
 
             {/* ACCORDIONS */}
             <div className="space-y-4">
@@ -403,6 +391,11 @@ export default function PropertyDetails() {
                   <div className="px-6 md:px-10 pb-10">
                     <div className="space-y-5 text-muted-foreground text-lg font-[quicksand]">
                       <div className="flex justify-between border-b pb-3">
+                        <span>Location</span>
+                        <span>{property.location}</span>
+                      </div>
+
+                      <div className="flex justify-between border-b pb-3">
                         <span>Bedrooms</span>
                         <span>{property.bedrooms}</span>
                       </div>
@@ -426,12 +419,6 @@ export default function PropertyDetails() {
                 )}
               </div>
 
-             
-                  
-
-
-
-                  
               {/* 4 */}
               <div className="border rounded-[28px] overflow-hidden bg-[#fafafa]">
                 <button
